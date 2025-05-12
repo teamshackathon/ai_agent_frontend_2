@@ -1,0 +1,123 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "mainブランチから新規ブランチ作成",
+            "type": "shell",
+            "command": "git checkout main && git pull && git checkout -b ${input:branch} && send_discord discord ${input:branch}",
+            "args": [],
+            "problemMatcher": [],
+        },
+        {
+            "label": "git fetch origin",
+            "type": "shell",
+            "command": "git fetch origin",
+            "args": [],
+            "problemMatcher": [],
+        },
+        {
+            "label": "git commit (変更をコミットしてプッシュできる状態にします)",
+            "type": "shell",
+            "command": "git add . && git commit -m \"${input:message}\"",
+            "args": [],
+            "problemMatcher": [],
+        },
+        {
+            "label": "git push (現在ブランチをプッシュします。未コミットがないか確認すること。)",
+            "type": "shell",
+            "command": "git push -u origin HEAD",
+            "args": [],
+            "problemMatcher": [],
+            "dependsOrder": "sequence",
+        },
+        {
+            "label": "stgにプルリクエストを作成",
+            "type": "shell",
+            "command": "pull_request",
+            "args": [],
+            "problemMatcher": [],
+        },
+        {
+            "label": "flutterのデバイスの確認",
+            "type": "shell",
+            "command": "flutter devices",
+            "args": [],
+            "problemMatcher": [],
+        },
+        {
+            "label": "起動可能なAndroidのエミュレータの確認",
+            "type": "shell",
+            "command": "flutter emulators",
+            "args": [],
+            "problemMatcher": [],
+        },
+        {
+            "label": "Androidのエミュレータの起動",
+            "type": "shell",
+            "command": "flutter emulators --launch ${input:emulator_id}",
+            "args": [],
+            "problemMatcher": [],
+        },
+        {
+            "label": "flutterの起動(開発モード)",
+            "type": "shell",
+            "command": "flutter run -d ${input:device_id} --dart-define=env=.env.development",
+            "args": [],
+            "problemMatcher": [],
+        },
+        {
+            "label": "flutterの起動(Chrome-disable-web-secure)",
+            "type": "shell",
+            "command": "flutter run -d chrome --web-browser-flag \"--disable-web-security\" --dart-define=env=.env.development",
+            "args": [],
+            "problemMatcher": [],
+        },
+        {
+            "label": "dartコードの整形",
+            "type": "shell",
+            "command": "dart format lib",
+            "args": [],
+            "problemMatcher": [],
+        },
+        {
+            "label": "[chrome]flutterの起動(開発モード)",
+            "type": "shell",
+            "command": "flutter run -d chrome --dart-define=env=.env.development",
+            "args": [],
+            "problemMatcher": [],
+        },
+        {
+            "label": "[android]flutterの起動(開発モード)",
+            "type": "shell",
+            "command": "flutter run -d emulator-5554 --dart-define=env=.env.development",
+            "args": [],
+            "problemMatcher": [],
+        }
+    ],
+    "inputs": [
+        {
+            "type": "promptString",
+            "id": "message",
+            "description": "コミット変更内容を入力してください。",
+            "default": ""
+        },
+        {
+            "type": "promptString",
+            "id": "branch",
+            "description": "ブランチ名を入力してください。",
+            "default": ""
+        },
+        {
+            "type": "promptString",
+            "id": "emulator_id",
+            "description": "エミュレータ名を入力してください。",
+            "default": ""
+        },
+        {
+            "type": "promptString",
+            "id": "device_id",
+            "description": "デバイス名を入力してください。",
+            "default": ""
+        }
+    ]
+}
