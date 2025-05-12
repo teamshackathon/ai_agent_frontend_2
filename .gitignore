@@ -1,0 +1,10 @@
+# ログ系
+**.log
+
+# 初期値系
+seeds/*
+!seeds/default
+
+# 環境変数系
+.env
+response.json
