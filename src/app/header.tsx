@@ -5,9 +5,9 @@ import {
 	healthCheckReadinessAtomLoadable,
 } from "@/lib/atom/HealthCheckAtom";
 
+import type { HealthCheckResponse } from "@/lib/domain/HealthCheckQuery";
 import { useAtomValue } from "jotai";
 import type { Loadable } from "jotai/vanilla/utils/loadable";
-import type { HealthCheckResponse } from "@/lib/domain/HealthCheckQuery";
 
 import { Loader2 } from "lucide-react"; // ShadCN UI では Lucide アイコンを多用
 
