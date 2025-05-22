@@ -5,7 +5,7 @@ FROM node:24-alpine AS builder
 WORKDIR /app
 
 # 環境変数をビルド前に設定
-ENV NEXT_PUBLIC_API_URL="http://ai-agent-2-backend-service:3004/api/v1"
+ENV NEXT_PUBLIC_API_URL="ai-agent-2-backend-service:3004/api/v1"
 
 # パッケージファイルをコピー
 COPY package.json package-lock.json* ./
