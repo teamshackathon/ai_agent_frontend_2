@@ -4,9 +4,9 @@ import { Button } from "@/components/ui/button";
 import { useFirebaseAuth } from "@/lib/hook/useFirebaseAuth";
 import { Loader2 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 
-export default function AuthCallback() {
+function AuthCallbackContent() {
 	const [error, setError] = useState<string | null>(null);
 	const { handleCallback, loading } = useFirebaseAuth();
 	const router = useRouter();
@@ -73,5 +73,20 @@ export default function AuthCallback() {
 			<Loader2 className="h-8 w-8 animate-spin text-blue-500 mb-4" />
 			<p className="text-lg">認証処理中...</p>
 		</div>
+	);
+}
+
+export default function AuthCallback() {
+	return (
+		<Suspense
+			fallback={
+				<div className="flex flex-col items-center justify-center min-h-screen">
+					<Loader2 className="h-8 w-8 animate-spin text-blue-500 mb-4" />
+					<p className="text-lg">読み込み中...</p>
+				</div>
+			}
+		>
+			<AuthCallbackContent />
+		</Suspense>
 	);
 }
