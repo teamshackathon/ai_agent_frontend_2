@@ -1,10 +1,5 @@
-import { type FirebaseApp, getApps, initializeApp } from "firebase/app";
-import {
-	browserLocalPersistence,
-	connectAuthEmulator,
-	getAuth,
-	setPersistence,
-} from "firebase/auth";
+import { getApp, getApps, initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
 	apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -15,27 +10,33 @@ const firebaseConfig = {
 	appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-export function initFirebaseApp(): FirebaseApp {
-	if (getApps().length > 0) {
-		return getApps()[0];
-	}
-
-	return initializeApp(firebaseConfig);
-}
-
-export function getFirebaseAuth() {
-	const app = initFirebaseApp();
-	const auth = getAuth(app);
-
-	if (process.env.NEXT_PUBLIC_USE_FIREBASE_EMULATOR === "true") {
-		if (!auth.emulatorConfig) {
-			connectAuthEmulator(auth, "http://localhost:9099");
+// サーバーサイドでの初期化を安全に行う
+function createFirebaseApp() {
+	if (typeof window === "undefined") {
+		// サーバーサイドの場合
+		// 環境変数が設定されているか確認
+		if (!process.env.NEXT_PUBLIC_FIREBASE_API_KEY) {
+			console.error("Firebase configuration missing in server environment");
+			// ダミーの設定を返して続行を許可
+			return initializeApp({
+				apiKey: "dummy-api-key",
+				authDomain: "dummy-auth-domain",
+				projectId: "dummy-project-id",
+			});
 		}
 	}
 
-	setPersistence(auth, browserLocalPersistence).catch((error) => {
-		console.error("認証永続化エラー:", error);
-	});
+	// 既に初期化されていれば、既存のappを返す
+	if (getApps().length > 0) {
+		return getApp();
+	}
 
-	return auth;
+	// 初期化
+	return initializeApp(firebaseConfig);
+}
+
+// Firebase Auth インスタンスを取得
+export function getFirebaseAuth() {
+	const app = createFirebaseApp();
+	return getAuth(app);
 }
