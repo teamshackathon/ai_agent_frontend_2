@@ -50,6 +50,3 @@ seeds/*
 # 環境変数系
 .env
 response.json
-
-
-package-lock.json
