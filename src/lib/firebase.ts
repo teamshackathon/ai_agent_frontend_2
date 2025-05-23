@@ -1,5 +1,5 @@
 import { getApp, getApps, initializeApp } from "firebase/app";
-import { getAuth, connectAuthEmulator } from "firebase/auth";
+import { connectAuthEmulator, getAuth } from "firebase/auth";
 
 const firebaseConfig = {
 	apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -40,23 +40,29 @@ export function getFirebaseAuth() {
 	const app = createFirebaseApp();
 	const auth = getAuth(app);
 
-  // 開発環境の場合、エミュレーターに接続する
-  if (
-    typeof window !== "undefined" && 
-    process.env.NODE_ENV === "development" && 
-    process.env.NEXT_PUBLIC_USE_FIREBASE_EMULATOR === "true"
-  ) {
-    // エミュレーターのホストとポート (デフォルトは localhost:9099)
-    const emulatorHost = process.env.NEXT_PUBLIC_FIREBASE_AUTH_EMULATOR_HOST || "localhost";
-    const emulatorPort = process.env.NEXT_PUBLIC_FIREBASE_AUTH_EMULATOR_PORT || "9099";
-    
-    try {
-      connectAuthEmulator(auth, `http://${emulatorHost}:${emulatorPort}`, { disableWarnings: false });
-      console.log(`Connected to Firebase Auth Emulator at ${emulatorHost}:${emulatorPort}`);
-    } catch (error) {
-      console.error("Failed to connect to Auth Emulator:", error);
-    }
-  }
+	// 開発環境の場合、エミュレーターに接続する
+	if (
+		typeof window !== "undefined" &&
+		process.env.NODE_ENV === "development" &&
+		process.env.NEXT_PUBLIC_USE_FIREBASE_EMULATOR === "true"
+	) {
+		// エミュレーターのホストとポート (デフォルトは localhost:9099)
+		const emulatorHost =
+			process.env.NEXT_PUBLIC_FIREBASE_AUTH_EMULATOR_HOST || "localhost";
+		const emulatorPort =
+			process.env.NEXT_PUBLIC_FIREBASE_AUTH_EMULATOR_PORT || "9099";
 
-  return auth;
+		try {
+			connectAuthEmulator(auth, `http://${emulatorHost}:${emulatorPort}`, {
+				disableWarnings: false,
+			});
+			console.log(
+				`Connected to Firebase Auth Emulator at ${emulatorHost}:${emulatorPort}`,
+			);
+		} catch (error) {
+			console.error("Failed to connect to Auth Emulator:", error);
+		}
+	}
+
+	return auth;
 }
