@@ -1,8 +1,14 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { useFirebaseAuth } from "@/lib/hook/useFirebaseAuth";
-import { Loader2 } from "lucide-react";
+import {
+	Button,
+	Center,
+	Heading,
+	Spinner,
+	Text,
+	VStack,
+} from "@chakra-ui/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useRef, useState } from "react";
 
@@ -55,24 +61,27 @@ function AuthCallbackContent() {
 
 	if (error) {
 		return (
-			<div className="flex flex-col items-center justify-center min-h-screen">
-				<h2 className="text-2xl font-bold text-red-600 mb-2">認証エラー</h2>
-				<p className="text-gray-600">{error}</p>
-				<Button
-					onClick={() => router.push("/")}
-					className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-				>
-					ホームに戻る
-				</Button>
-			</div>
+			<Center minH="100vh">
+				<VStack spacing={4}>
+					<Heading color="red.500" size="lg">
+						認証エラー
+					</Heading>
+					<Text color="gray.600">{error}</Text>
+					<Button onClick={() => router.push("/")} colorScheme="blue" size="md">
+						ホームに戻る
+					</Button>
+				</VStack>
+			</Center>
 		);
 	}
 
 	return (
-		<div className="flex flex-col items-center justify-center min-h-screen">
-			<Loader2 className="h-8 w-8 animate-spin text-blue-500 mb-4" />
-			<p className="text-lg">認証処理中...</p>
-		</div>
+		<Center minH="100vh">
+			<VStack spacing={4}>
+				<Spinner size="xl" color="blue.500" thickness="4px" />
+				<Text fontSize="lg">認証処理中...</Text>
+			</VStack>
+		</Center>
 	);
 }
 
@@ -80,10 +89,12 @@ export default function AuthCallback() {
 	return (
 		<Suspense
 			fallback={
-				<div className="flex flex-col items-center justify-center min-h-screen">
-					<Loader2 className="h-8 w-8 animate-spin text-blue-500 mb-4" />
-					<p className="text-lg">読み込み中...</p>
-				</div>
+				<Center minH="100vh">
+					<VStack spacing={4}>
+						<Spinner size="xl" color="blue.500" thickness="4px" />
+						<Text fontSize="lg">読み込み中...</Text>
+					</VStack>
+				</Center>
 			}
 		>
 			<AuthCallbackContent />

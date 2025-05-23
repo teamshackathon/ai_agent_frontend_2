@@ -1,17 +1,6 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
 import { JotaiProvider } from "@/app/provider";
-
-const geistSans = Geist({
-	variable: "--font-geist-sans",
-	subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-	variable: "--font-geist-mono",
-	subsets: ["latin"],
-});
+import { ChakraProvider } from "@chakra-ui/react";
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
 	title: "FurniAIzer",
@@ -24,9 +13,11 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="ja">
-			<body className={`${geistSans.variable} ${geistMono.variable}`}>
-				<JotaiProvider>{children}</JotaiProvider>
+		<html lang="ja" suppressHydrationWarning>
+			<body>
+				<ChakraProvider>
+					<JotaiProvider>{children}</JotaiProvider>
+				</ChakraProvider>
 			</body>
 		</html>
 	);
