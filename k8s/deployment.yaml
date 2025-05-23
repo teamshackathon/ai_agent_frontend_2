@@ -24,9 +24,6 @@ spec:
       - name: frontend
         image: ghcr.io/teamshackathon/prod/ai-agent-2-frontend:latest
         imagePullPolicy: Always
-        env:
-        - name: NEXT_PUBLIC_API_URL
-          value: "http://ai-agent-2-backend-service:3004/api/v1"
         ports:
         - containerPort: 3000
           name: http
