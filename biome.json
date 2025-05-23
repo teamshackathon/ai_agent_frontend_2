@@ -7,7 +7,7 @@
 	},
 	"files": {
 		"ignoreUnknown": false,
-		"ignore": ["**/node_modules/**/", "**/dist/**", "**/build/**", "**/out/**", "**/.next/**", "**/.vercel/**", "**/.turbo/**"]
+		"ignore": ["**/node_modules/**/", "**/dist/**", "**/build/**", "**/out/**", "**/.next/**", "**/.vercel/**", "**/.turbo/**", "./src/components/ui/**"]
 	},
 	"formatter": {
 		"enabled": true,
