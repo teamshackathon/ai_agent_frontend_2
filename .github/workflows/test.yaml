@@ -28,3 +28,6 @@ jobs:
     
     - name: Run check
       run: npm run check
+
+    - name: Run build Test
+      run: npm run build
