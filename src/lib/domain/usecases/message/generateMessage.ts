@@ -1,6 +1,6 @@
 // lib/domain/usecases/message/generateMessage.ts
 
-import { Message, Role } from "@/lib/domain/types/Message";
+import type { Message, Role } from "@/lib/domain/types/Message";
 
 /**
  * メッセージを生成する関数。
@@ -9,10 +9,10 @@ import { Message, Role } from "@/lib/domain/types/Message";
  * @returns 生成されたメッセージオブジェクト
  */
 export function generateMessage(text: string, role: Role): Message {
-  return {
-    id: crypto.randomUUID(),
-    text,
-    role,
-    timeStamp: new Date(),
-  };
+	return {
+		id: crypto.randomUUID(),
+		text,
+		role,
+		timeStamp: new Date(),
+	};
 }
