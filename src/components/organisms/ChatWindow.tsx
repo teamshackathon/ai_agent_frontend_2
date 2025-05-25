@@ -1,11 +1,19 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
+import ChatInput from "../molecules/message/ChatInput";
 
 export default function ChatWindow() {
+  const [input, setInput] = useState("");
+
   return (
-    <>
-      <h1>test!!!!!</h1>
-    </>
+    <div className="p-4 max-w-xl mx-auto">
+      <ChatInput
+        value={input}
+        onChange={setInput}
+        onSend={() => {}}
+        isSending={false}
+      />
+    </div>
   );
 }
