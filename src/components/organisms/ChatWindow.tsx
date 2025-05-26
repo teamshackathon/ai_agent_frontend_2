@@ -1,19 +1,20 @@
 "use client";
 
 import { useState } from "react";
+import { Box } from "@chakra-ui/react";
 import ChatInput from "../molecules/message/ChatInput";
 
 export default function ChatWindow() {
-	const [input, setInput] = useState("");
+  const [input, setInput] = useState("");
 
-	return (
-		<div className="p-4 max-w-xl mx-auto">
-			<ChatInput
-				value={input}
-				onChange={setInput}
-				onSend={() => {}}
-				isSending={false}
-			/>
-		</div>
-	);
+  return (
+    <Box p={4} maxW="xl" mx="auto">
+      <ChatInput
+        value={input}
+        onChange={setInput}
+        onSend={() => {}}
+        isSending={false}
+      />
+    </Box>
+  );
 }
