@@ -1,14 +1,23 @@
 "use client";
 
-import { ChakraProvider } from "@chakra-ui/react";
-import { Provider } from "jotai";
+import { ChakraProvider, extendTheme } from "@chakra-ui/react";
+import { Provider as JotaiRootProvider } from "jotai";
+import { CacheProvider } from "@emotion/react";
+import { emotionCache } from "@/lib/emotion-cache";
 
-export function JotaiProvider({ children }: { children: React.ReactNode }) {
-	return <Provider>{children}</Provider>;
-}
+// Chakra のテーマ設定（必要なら既存のテーマにマージ）
+const config = {
+  initialColorMode: "light",
+  useSystemColorMode: false,
+};
+const theme = extendTheme({ config });
 
-export function ChakraProviderWrapper({
-	children,
-}: { children: React.ReactNode }) {
-	return <ChakraProvider>{children}</ChakraProvider>;
+export function Providers({ children }: { children: React.ReactNode }) {
+  return (
+    <CacheProvider value={emotionCache}>
+      <ChakraProvider theme={theme}>
+        <JotaiRootProvider>{children}</JotaiRootProvider>
+      </ChakraProvider>
+    </CacheProvider>
+  );
 }

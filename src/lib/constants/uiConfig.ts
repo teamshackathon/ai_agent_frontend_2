@@ -2,6 +2,7 @@
 
 import type { CSSProperties } from "react";
 import { Send, Loader } from "lucide-react";
+import { px } from "framer-motion";
 
 export const UI_CONFIG = {
   messageArea: {
@@ -88,6 +89,19 @@ export const UI_CONFIG = {
       px: 2,
       py: 2,
       w: "full",
+    },
+  },
+
+  chatWindow: {
+    style: {
+      w: "full",
+      position: "fixed" as const,
+      bottom: 0,
+      left: 0,
+      px: 4,
+      py: 4,
+      zIndex: 10,
+      boxShadow: "md",
     },
   },
 };
