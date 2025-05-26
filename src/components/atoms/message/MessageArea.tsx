@@ -1,9 +1,12 @@
 // components/atoms/message/MessageArea.tsx
 
 import { forwardRef } from "react";
-import { Textarea } from "@chakra-ui/react";
+import TextareaAutosize from "react-textarea-autosize";
+import { chakra } from "@chakra-ui/react";
 import type { ComponentProps } from "react";
 import { UI_CONFIG } from "@/lib/constants/uiConfig";
+
+const ChakraAutosizeTextarea = chakra(TextareaAutosize);
 
 type MessageAreaProps = ComponentProps<"textarea">;
 
@@ -19,12 +22,14 @@ type MessageAreaProps = ComponentProps<"textarea">;
 const MessageArea = forwardRef<HTMLTextAreaElement, MessageAreaProps>(
   (props, ref) => {
     return (
-      <Textarea
+      <ChakraAutosizeTextarea
         ref={ref}
-        {...UI_CONFIG.messageArea.style}
         placeholder={UI_CONFIG.messageArea.text.placeholder}
-        variant="unstyled"
+        {...UI_CONFIG.messageArea.autosizeProps}
+        {...UI_CONFIG.messageArea.containerStyle}
         {...props}
+        sx={UI_CONFIG.messageArea.scroll}
+        style={UI_CONFIG.messageArea.textareaStyle}
       />
     );
   }

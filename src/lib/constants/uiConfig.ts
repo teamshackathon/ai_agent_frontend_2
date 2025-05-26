@@ -1,22 +1,47 @@
 // lib/constants/uiConfig.ts
 
+import type { CSSProperties } from "react";
 import { Send, Loader } from "lucide-react";
-
-const MESSAGE_LINEHEIGHT = 1.1; // 行間のデフォルト値
 
 export const UI_CONFIG = {
   messageArea: {
-    style: {
-      resize: "none" as const, // サイズ変更不可
+    containerStyle: {
+      // autosize-textareaのコンテナスタイル
+      w: "full", // 幅を100%に設定
+      flexGrow: 1, // フレックスコンテナ内での成長を許可
       fontSize: "md", // フォントサイズ
-      lineHeight: MESSAGE_LINEHEIGHT, // 行間
+      lineHeight: 1.2, // 行間のデフォルト値
       pt: 0, // 上の余白
       pb: 0, // 下の余白
-      w: "full", // 幅を100%に
-      minH: `${MESSAGE_LINEHEIGHT * 1}em`, // 最小の高さ
-      maxH: `${MESSAGE_LINEHEIGHT * 4.5}em`, // 最大の高さ
-      overflowY: "auto" as const,
-      flexGrow: 1,
+      pr: 0.5, // 右の余白
+      pl: 3, // 左の余白
+      overflowY: "visible" as const, // スクロール可能にする, as constを使うことで、TypeScriptに定数として認識させる
+    },
+    scroll: {
+      scrollbarGutter: "stable", // スクロールバー分のスペースを確保
+      overflowY: "auto", // 縦方向のオーバーフローを自動にする
+      "&::-webkit-scrollbar": {
+        width: "8px",
+      },
+      "&::-webkit-scrollbar-thumb": {
+        background: "gray.400",
+        borderRadius: "8px",
+      },
+    },
+    textareaStyle: {
+      // autosize-textareaのスタイル
+      width: "100%", // 幅を100%に設定
+      resize: "none" as CSSProperties["resize"], // リサイズ不可にする
+      border: "none", // ボーダーをなしにする
+      outline: "none", // アウトラインをなしにする
+      background: "transparent", // 背景を透明にする
+      font: "inherit", // フォントを親要素から継承
+      lineHeight: "1.2", // ← stringで渡す
+    } satisfies CSSProperties,
+    autosizeProps: {
+      // 何行まで自動で拡大するか
+      minRows: 1,
+      maxRows: 6.5,
     },
     text: {
       placeholder: "メッセージ入力(ctrl + Enterで送信)",
