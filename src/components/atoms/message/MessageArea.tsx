@@ -23,6 +23,7 @@ const MessageArea = forwardRef<HTMLTextAreaElement, MessageAreaProps>(
         ref={ref}
         {...UI_CONFIG.messageArea.style}
         placeholder={UI_CONFIG.messageArea.text.placeholder}
+        variant="unstyled"
         {...props}
       />
     );

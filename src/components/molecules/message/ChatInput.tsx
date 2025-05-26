@@ -1,7 +1,7 @@
 // components/molecules/message/ChatInput.tsx
 
 import { useEffect, useRef } from "react";
-import { Box } from "@chakra-ui/react";
+import { Box, Flex, useColorModeValue } from "@chakra-ui/react";
 import MessageArea from "@/components/atoms/message/MessageArea";
 import SendButton from "@/components/atoms/message/SendButton";
 import { UI_CONFIG } from "@/lib/constants/uiConfig";
@@ -28,23 +28,27 @@ export default function ChatInput({
   return (
     <Box
       as="form"
-      w="full"
-      position="relative"
       onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         onSend();
       }}
+      bg={useColorModeValue("gray.100", "gray.700")}
+      {...UI_CONFIG.chatInput.style}
     >
-      <MessageArea
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        ref={textareaRef}
-      />
-      <SendButton
-        isSending={isSending}
-        type="submit"
-        disabled={isSending || value.trim() === ""}
-      />
+      <Flex direction="column" gap={2}>
+        <MessageArea
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          ref={textareaRef}
+        />
+        <Flex justify="flex-end">
+          <SendButton
+            isSending={isSending}
+            type="submit"
+            disabled={isSending || value.trim() === ""}
+          />
+        </Flex>
+      </Flex>
     </Box>
   );
 }

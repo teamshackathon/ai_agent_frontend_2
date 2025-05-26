@@ -8,7 +8,7 @@ export default function ChatWindow() {
   const [input, setInput] = useState("");
 
   return (
-    <Box p={4} maxW="xl" mx="auto">
+    <Box p={4} w="full">
       <ChatInput
         value={input}
         onChange={setInput}
