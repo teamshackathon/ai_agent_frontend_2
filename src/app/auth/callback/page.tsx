@@ -36,11 +36,9 @@ function AuthCallbackContent() {
 					return;
 				}
 
-				console.log("認証開始");
 				const success = await handleCallback(token);
 
 				if (success) {
-					console.log("認証成功: ホームページへリダイレクト");
 					router.push("/");
 				} else {
 					setError("認証に失敗しました");

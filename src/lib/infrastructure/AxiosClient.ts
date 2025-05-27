@@ -68,8 +68,8 @@ export class AxiosClient {
 		return response;
 	}
 
-	async post<T>(url: string, data: T): Promise<AxiosResponse<T>> {
-		const response = await this.axiosInstance.post<T>(
+	async post<T, U>(url: string, data: T): Promise<AxiosResponse<U>> {
+		const response = await this.axiosInstance.post<U>(
 			url,
 			data,
 			this.recequestConfig,
@@ -77,8 +77,8 @@ export class AxiosClient {
 		return response;
 	}
 
-	async put<T>(url: string, data: T): Promise<AxiosResponse<T>> {
-		const response = await this.axiosInstance.put<T>(
+	async put<T, U>(url: string, data: T): Promise<AxiosResponse<U>> {
+		const response = await this.axiosInstance.put<U>(
 			url,
 			data,
 			this.recequestConfig,

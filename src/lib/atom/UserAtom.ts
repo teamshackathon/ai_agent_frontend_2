@@ -9,7 +9,6 @@ export const userAtomAsync = atom(async (get) => {
 	try {
 		const user = get(userAtom);
 		// userがnullの場合は、nullを返す
-		console.log("userAtomAsync", user);
 		if (!user) {
 			return null;
 		}
