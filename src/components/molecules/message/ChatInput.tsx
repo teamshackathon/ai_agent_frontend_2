@@ -1,7 +1,7 @@
 // components/molecules/message/ChatInput.tsx
 
 import { useEffect, useRef } from "react";
-import { Box, Flex, useColorModeValue } from "@chakra-ui/react";
+import { Box, Flex, useColorModeValue, Divider } from "@chakra-ui/react";
 import MessageArea from "@/components/atoms/message/MessageArea";
 import SendButton from "@/components/atoms/message/SendButton";
 import { UI_CONFIG } from "@/lib/constants/uiConfig";
@@ -41,6 +41,7 @@ export default function ChatInput({
           onChange={(e) => onChange(e.target.value)}
           ref={textareaRef}
         />
+        <Divider orientation="horizontal" />
         <Flex justify="flex-end">
           <SendButton
             isSending={isSending}
