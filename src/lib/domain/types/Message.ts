@@ -8,15 +8,24 @@
  * - SYSTEM: システムからのメッセージ（初期化・設定など）
  */
 export const ROLES = Object.freeze({
-	USER: "USER",
-	ASSISTANT: "ASSISTANT",
-	SYSTEM: "SYSTEM",
+  USER: "USER",
+  ASSISTANT: "ASSISTANT",
+  SYSTEM: "SYSTEM",
 } as const);
 
 /**
  * チャットにおける発言者のロール（役割）を表す型。
  */
 export type Role = (typeof ROLES)[keyof typeof ROLES];
+
+export type ToolCall = {
+  id: string; // ツールコールの一意なID
+  type: "function"; // ツールコールのタイプ（関数呼び出し）
+  function: {
+    name: string; // 呼び出す関数の名前
+    arguments: string; // JSON文字列
+  };
+};
 
 /**
  * チャットメッセージを表す型。
@@ -25,35 +34,30 @@ export type Role = (typeof ROLES)[keyof typeof ROLES];
  * Firestoreやログなどの保存対象としても使用可能。
  */
 export type Message = {
-	/** 一意なメッセージID（UUIDなど） */
-	id: string;
+  /** 一意なメッセージID（UUIDなど） */
+  id: string;
 
-	/** メッセージ本文 */
-	text: string;
+  /** 発言者のロール（ユーザー/アシスタント/システム） */
+  role: Role;
 
-	/** 発言者のロール（ユーザー/アシスタント/システム） */
-	role: Role;
+  /** メッセージ本文 */
+  text?: string;
 
-	/** 送信時刻 */
-	timeStamp: Date;
+  /** ツールコールの情報（オプション） */
+  toolCalls?: ToolCall[];
 
-	/** 添付ファイルのパスやURL（オプション） */
-	attachment?: string;
+  /** 送信時刻 */
+  timeStamp: Date;
 
-	/**
-	 * AIアシスタントによる関数呼び出しの要求情報（オプション）
-	 * OpenAIのFunction Callingなどで使用。
-	 */
-	functionCall?: {
-		/** 呼び出す関数名 */
-		name: string;
+  /** 添付ファイルのパスやURL（オプション） */
+  attachment?: string;
 
-		/** 関数に渡す引数オブジェクト */
-		arguments: Record<string, any>;
-	};
+  /** メッセージの状態（送信済み/送信中/エラーなど）（オプション）*/
+  finishReason?: string;
 
-	/**
-	 * LLMからの元レスポンス全体を保持するフィールド（デバッグ/解析用・任意）
-	 */
-	rawResponse?: any;
+  /** LLMからのレスポンスのトークン数（オプション）*/
+  usage?: any;
+
+  /** LLMからの元レスポンス全体を保持するフィールド（デバッグ/解析用・任意）*/
+  rawResponse?: any;
 };
