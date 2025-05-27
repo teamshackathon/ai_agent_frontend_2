@@ -6,6 +6,7 @@ export class User {
 		public displayName: string,
 		public email: string,
 		public photoURL: string,
+		public username?: string,
 	) {}
 }
 
@@ -14,10 +15,17 @@ export interface UserResponse {
 	display_name: string;
 	email: string;
 	photo_url: string;
+	username?: string;
 }
 
 function createUser(res: UserResponse): User {
-	return new User(res.id, res.display_name, res.email, res.photo_url);
+	return new User(
+		res.id,
+		res.display_name,
+		res.email,
+		res.photo_url,
+		res.username,
+	);
 }
 
 export async function getUser(): Promise<User> {
