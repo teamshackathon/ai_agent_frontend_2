@@ -20,19 +20,19 @@ type MessageAreaProps = ComponentProps<"textarea">;
  * その他、標準の `<textarea>` 属性を受け取る
  */
 const MessageArea = forwardRef<HTMLTextAreaElement, MessageAreaProps>(
-  (props, ref) => {
-    return (
-      <ChakraAutosizeTextarea
-        ref={ref}
-        placeholder={UI_CONFIG.messageArea.text.placeholder}
-        {...UI_CONFIG.messageArea.autosizeProps}
-        {...UI_CONFIG.messageArea.containerStyle}
-        {...props}
-        sx={UI_CONFIG.messageArea.scroll}
-        style={UI_CONFIG.messageArea.textareaStyle}
-      />
-    );
-  }
+	(props, ref) => {
+		return (
+			<ChakraAutosizeTextarea
+				ref={ref}
+				placeholder={UI_CONFIG.messageArea.text.placeholder}
+				{...UI_CONFIG.messageArea.autosizeProps}
+				{...UI_CONFIG.messageArea.containerStyle}
+				{...props}
+				sx={UI_CONFIG.messageArea.scroll}
+				style={UI_CONFIG.messageArea.textareaStyle}
+			/>
+		);
+	},
 );
 
 MessageArea.displayName = "MessageArea";

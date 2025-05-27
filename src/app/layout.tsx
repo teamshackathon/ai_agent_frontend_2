@@ -2,20 +2,20 @@ import { Providers } from "./provider";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "FurniAIzer",
-  description: "FurniAIzer",
+	title: "FurniAIzer",
+	description: "FurniAIzer",
 };
 
 export default function RootLayout({
-  children,
+	children,
 }: {
-  children: React.ReactNode;
+	children: React.ReactNode;
 }) {
-  return (
-    <html lang="ja" suppressHydrationWarning>
-      <body>
-        <Providers>{children}</Providers>
-      </body>
-    </html>
-  );
+	return (
+		<html lang="ja" suppressHydrationWarning>
+			<body>
+				<Providers>{children}</Providers>
+			</body>
+		</html>
+	);
 }

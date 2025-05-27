@@ -3,12 +3,12 @@ import ChatWindow from "@/components/organisms/ChatWindow";
 import { Box } from "@chakra-ui/react";
 
 export default function Home() {
-  return (
-    <Box h="100vh" display="flex" flexDirection="column">
-      <Header />
-      <Box flex="1" overflow="hidden">
-        <ChatWindow />
-      </Box>
-    </Box>
-  );
+	return (
+		<Box h="100vh" display="flex" flexDirection="column">
+			<Header />
+			<Box flex="1" overflow="hidden">
+				<ChatWindow />
+			</Box>
+		</Box>
+	);
 }
