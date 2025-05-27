@@ -33,7 +33,7 @@ import { MdOutlineEmail } from "react-icons/md";
 
 const UserMenu = () => {
   const user = useAtomValue(userAtomLoadable);
-  console.log("UserMenu", user);
+  console.log("UserMenu user:", user);
 
   const { logout } = useFirebaseAuth();
 
