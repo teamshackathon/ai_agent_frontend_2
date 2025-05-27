@@ -1,10 +1,10 @@
 // components/molecules/message/ChatInput.tsx
 
-import { useEffect, useRef } from "react";
-import { Box, Flex, useColorModeValue, Divider } from "@chakra-ui/react";
 import MessageArea from "@/components/atoms/message/MessageArea";
 import SendButton from "@/components/atoms/message/SendButton";
 import { UI_CONFIG } from "@/lib/constants/uiConfig";
+import { Box, Divider, Flex, useColorModeValue } from "@chakra-ui/react";
+import { useEffect, useRef } from "react";
 
 type Props = {
 	value: string;

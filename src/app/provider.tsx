@@ -1,9 +1,9 @@
 "use client";
 
-import { ChakraProvider, extendTheme } from "@chakra-ui/react";
-import { Provider as JotaiRootProvider } from "jotai";
-import { CacheProvider } from "@emotion/react";
 import { emotionCache } from "@/lib/emotion-cache";
+import { ChakraProvider, extendTheme } from "@chakra-ui/react";
+import { CacheProvider } from "@emotion/react";
+import { Provider as JotaiRootProvider } from "jotai";
 
 // Chakra のテーマ設定（必要なら既存のテーマにマージ）
 const config = {

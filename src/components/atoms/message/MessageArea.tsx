@@ -1,10 +1,10 @@
 // components/atoms/message/MessageArea.tsx
 
-import { forwardRef } from "react";
-import TextareaAutosize from "react-textarea-autosize";
-import { chakra } from "@chakra-ui/react";
-import type { ComponentProps } from "react";
 import { UI_CONFIG } from "@/lib/constants/uiConfig";
+import { chakra } from "@chakra-ui/react";
+import { forwardRef } from "react";
+import type { ComponentProps } from "react";
+import TextareaAutosize from "react-textarea-autosize";
 
 const ChakraAutosizeTextarea = chakra(TextareaAutosize);
 

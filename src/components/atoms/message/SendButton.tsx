@@ -1,7 +1,7 @@
 // components/atoms/message/SendButton.tsx
 
-import { Button, Icon } from "@chakra-ui/react";
 import { UI_CONFIG } from "@/lib/constants/uiConfig";
+import { Button, Icon } from "@chakra-ui/react";
 import type { ComponentProps } from "react";
 
 type SendButtonProps = ComponentProps<typeof Button> & {

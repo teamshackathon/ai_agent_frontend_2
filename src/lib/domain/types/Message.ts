@@ -56,8 +56,8 @@ export type Message = {
 	finishReason?: string;
 
 	/** LLMからのレスポンスのトークン数（オプション）*/
-	usage?: any;
+	usage?: Record<string, unknown>;
 
 	/** LLMからの元レスポンス全体を保持するフィールド（デバッグ/解析用・任意）*/
-	rawResponse?: any;
+	rawResponse?: unknown;
 };

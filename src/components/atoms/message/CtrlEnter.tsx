@@ -1,6 +1,6 @@
 // components/atoms/message/CtrlEnter.tsx
 
-import { useRef, useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 type Props = {
 	onSend: () => void;

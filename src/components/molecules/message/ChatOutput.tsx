@@ -1,11 +1,11 @@
 // components/molecules/message/ChatOutput.tsx
 
-import { Box, VStack } from "@chakra-ui/react";
-import { type Message, ROLES } from "@/lib/domain/types/Message";
-import { UserMessage } from "@/components/atoms/message/UserMessage";
 import { AssistantMessage } from "@/components/atoms/message/AssistantMessage";
 import { SystemMessage } from "@/components/atoms/message/SystemMessage";
+import { UserMessage } from "@/components/atoms/message/UserMessage";
 import { UI_CONFIG } from "@/lib/constants/uiConfig";
+import { type Message, ROLES } from "@/lib/domain/types/Message";
+import { Box, VStack } from "@chakra-ui/react";
 
 export const ChatOutput = ({
 	messages,
@@ -16,7 +16,7 @@ export const ChatOutput = ({
 }) => {
 	return (
 		<Box {...UI_CONFIG.chatOutput.style}>
-			<VStack spacing={1} direction="column" width="100%">
+			<VStack {...UI_CONFIG.chatOutput.vStack}>
 				{messages.slice().map((message) => {
 					switch (message.role) {
 						case ROLES.USER:

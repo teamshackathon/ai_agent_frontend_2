@@ -1,69 +1,60 @@
-// lib/constants/uiConfig.ts
-
+import { Loader, Send } from "lucide-react";
 import type { CSSProperties } from "react";
-import { Send, Loader } from "lucide-react";
-import { color } from "framer-motion";
-import { position } from "@chakra-ui/react";
+
+const scrollbarStyle = {
+	"&::-webkit-scrollbar": {
+		width: "8px",
+	},
+	"&::-webkit-scrollbar-thumb": {
+		background: "gray.400",
+		borderRadius: "8px",
+	},
+	"&::-webkit-scrollbar-track": {
+		background: "transparent",
+	},
+};
 
 export const UI_CONFIG = {
-	// メッセージ入力エリアのスタイル設定
 	messageArea: {
-		// autosize-textareaのコンテナスタイル
 		containerStyle: {
-			w: "full", // 幅を100%に設定
-			flexGrow: 1, // フレックスコンテナ内での成長を許可
-			fontSize: "md", // フォントサイズ
-			lineHeight: 1.2, // 行間のデフォルト値
-			pt: 0, // 上の余白
-			pb: 0, // 下の余白
-			pr: 0.5, // 右の余白
-			pl: 3, // 左の余白
-			overflowY: "visible" as const, // スクロール可能にする, as constを使うことで、TypeScriptに定数として認識させる
+			w: "full",
+			flexGrow: 1,
+			fontSize: "md",
+			lineHeight: 1.2,
+			pt: 0,
+			pb: 0,
+			pr: 0.5,
+			pl: 3,
+			overflowY: "visible" as const,
 		},
-		// スクロールバーのスタイル
 		scroll: {
-			scrollbarGutter: "stable", // スクロールバー分のスペースを確保
-			overflowY: "auto", // 縦方向のオーバーフローを自動にする
-			"&::-webkit-scrollbar": {
-				width: "8px",
-			},
-			"&::-webkit-scrollbar-thumb": {
-				background: "gray.400",
-				borderRadius: "8px",
-			},
+			scrollbarGutter: "stable",
+			overflowY: "auto",
+			...scrollbarStyle,
 		},
-		// autosize-textareaのスタイル
 		textareaStyle: {
-			width: "100%", // 幅を100%に設定
-			resize: "none" as CSSProperties["resize"], // リサイズ不可にする
-			border: "none", // ボーダーをなしにする
-			outline: "none", // アウトラインをなしにする
-			background: "transparent", // 背景を透明にする
-			font: "inherit", // フォントを親要素から継承
-			lineHeight: "1.2", // ← stringで渡す
+			width: "100%",
+			resize: "none" as CSSProperties["resize"],
+			border: "none",
+			outline: "none",
+			background: "transparent",
+			font: "inherit",
+			lineHeight: "1.2",
 		} satisfies CSSProperties,
-		// 何行まで自動で拡大するか
 		autosizeProps: {
 			minRows: 1,
 			maxRows: 6.5,
 		},
-		// プレースホルダーのスタイル
 		text: {
 			placeholder: "メッセージ入力(ctrl + Enterで送信)",
 		},
 	},
 
-	// メッセージ送信ボタンのスタイル設定
 	sendButton: {
-		// ボタンのアイコン
 		icon: {
 			component: Send,
-			style: {
-				boxSize: 4,
-				color: "inherit",
-			},
+			style: { boxSize: 4, color: "inherit" },
 		},
-		// ローディング中のアイコン
 		load: {
 			component: Loader,
 			style: {
@@ -71,49 +62,44 @@ export const UI_CONFIG = {
 				animation: "spin 1s linear infinite",
 			},
 		},
-		// ボタンのスタイル
 		button: {
 			w: 10,
 			h: 10,
 			borderRadius: "full",
-			bg: "blue.500", // 背景色
+			bg: "blue.500",
 			color: "gray.100",
 			_hover: {
-				bg: "blue.600", // ホバー時の背景色
+				bg: "blue.600",
 				color: "gray.50",
 			},
-			zIndex: 1, // 表示レイヤー
-			variant: "ghost" as const, // ボタンのバリアント
+			zIndex: 1,
+			variant: "ghost" as const,
 		},
-		// アクセシビリティのラベル
 		accessibility: {
 			label: "メッセージ送信",
 		},
 	},
 
-	// チャット入力エリア全体のスタイル設定
 	chatInput: {
 		style: {
-			overflow: "visible" as const, // はみだしてもスクロールバーを表示しない(他で表示するため)
-			borderRadius: "2xl", // 角丸のサイズ
-			px: 2, // 左右のパディング
-			py: 2, // 上下のパディング
-			w: "full", // 幅を100%に設定
-			shadow: "md",
+			overflow: "visible" as const,
+			borderRadius: "2xl",
+			px: 2,
+			py: 2,
+			w: "full",
+			boxShadow: "md",
 		},
 	},
 
-	// チャットウィンドウ全体のスタイル設定
 	chatWindow: {
 		outer: {
-			position: "relative" as const,
 			display: "flex" as const,
 			flexDirection: "column" as const,
 			height: "100%",
 		},
 		input: {
 			px: 4,
-			py: 2,
+			pb: 2,
 		},
 		output: {
 			flex: 1,
@@ -121,8 +107,9 @@ export const UI_CONFIG = {
 			flexDirection: "column" as const,
 			overflowY: "auto" as const,
 			justifyContent: "flex-end" as const,
-			px: 4,
-			py: 4,
+			pr: 2,
+			pl: 4,
+			sx: { ...scrollbarStyle },
 		},
 		Loading: {
 			flex: {
@@ -149,13 +136,21 @@ export const UI_CONFIG = {
 			position: "relative" as const,
 			display: "flex" as const,
 			flexDirection: "column" as const,
+			overflowY: "auto" as const,
+			pr: 2,
+			sx: { ...scrollbarStyle },
+		},
+		vStack: {
+			spacing: 1,
+			width: "100%",
+			flex: 1,
+			justify: "flex-end",
 		},
 	},
 
-	// メッセージログのスタイル設定
 	message: {
 		style: {
-			px: 3,
+			px: 4,
 			py: 1,
 			borderRadius: "3xl",
 			maxWidth: "70%",
@@ -167,12 +162,8 @@ export const UI_CONFIG = {
 				justify: "flex-end" as const,
 				my: 1,
 			},
-			color: {
-				bg: "blue.200",
-			},
-			fontColor: {
-				color: "black",
-			},
+			color: { bg: "blue.200" },
+			font: { color: "black", lineHeight: 1.3 },
 		},
 		assistant: {
 			adjust: {
@@ -180,12 +171,8 @@ export const UI_CONFIG = {
 				justify: "flex-start" as const,
 				my: 1,
 			},
-			color: {
-				bg: "green.200",
-			},
-			fontColor: {
-				color: "black",
-			},
+			color: { bg: "green.200" },
+			font: { color: "black", lineHeight: 1.3 },
 		},
 		system: {
 			adjust: {
@@ -193,12 +180,8 @@ export const UI_CONFIG = {
 				justify: "center" as const,
 				my: 1,
 			},
-			color: {
-				bg: "yellow.200",
-			},
-			fontColor: {
-				color: "black",
-			},
+			color: { bg: "yellow.200" },
+			font: { color: "black", lineHeight: 1.3 },
 		},
 	},
 };
