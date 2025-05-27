@@ -19,14 +19,14 @@
             "type": "shell",
             "command": "git fetch origin",
             "args": [],
-            "problemMatcher": [],
+            "problemMatcher": []
         },
         {
             "label": "git commit (変更をコミットしてプッシュできる状態にします)",
             "type": "shell",
             "command": "git add . && git commit -m \"${input:message}\"",
             "args": [],
-            "problemMatcher": [],
+            "problemMatcher": []
         },
         {
             "label": "git push (現在ブランチをプッシュします。未コミットがないか確認すること。)",
@@ -34,7 +34,7 @@
             "command": "git push -u origin HEAD",
             "args": [],
             "problemMatcher": [],
-            "dependsOrder": "sequence",
+            "dependsOrder": "sequence"
         },
         {
             "label": "stgにプルリクエストを作成",
@@ -47,14 +47,15 @@
             },
             "osx": {
                 "command": "chmod +x setup_and_pull_request.sh && ./setup_and_pull_request.sh"
-            }
+            },
+            "problemMatcher": []
         },
         {
             "label": "コードの整形",
             "type": "shell",
             "command": "npm run format:fix && npm run lint:fix && npm run check:fix",
             "args": [],
-            "problemMatcher": [],
+            "problemMatcher": []
         }
     ],
     "inputs": [
