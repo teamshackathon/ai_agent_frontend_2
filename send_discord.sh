@@ -5,7 +5,7 @@ set -e
 service="$1"
 message="$2"
 
-# メッセージから数字を抽出 (AAGC2-123_タイトル の形式)
+# メッセージから数字を抽出 (例: AAGC2-123_タイトル)
 number=$(echo "$message" | sed -nE 's/.*-([0-9]+)_.*/\1/p')
 
 if [ -z "$number" ]; then
@@ -15,7 +15,6 @@ fi
 
 if [ ! -f ".env" ]; then
     echo "[エラー] .envファイルが見つかりません。"
-    echo "以下のGoogle Driveよりenvをダウンロードしてください： https://drive.google.com/xxxxx"
     exit 1
 fi
 
@@ -35,7 +34,14 @@ if [ "$service" = "discord" ]; then
       -d "{\"filter\": {\"property\": \"ID\",\"number\": {\"equals\": $number}}}" \
       "$notion_url" > "$JSON_FILE"
 
-    # jqを使って情報を抽出
+    result_count=$(jq '.results | length' "$JSON_FILE")
+    if [ "$result_count" -eq 0 ]; then
+        echo "[警告] Notionに該当するタスクが見つかりません (ID: $number)"
+        rm -f "$JSON_FILE"
+        exit 1
+    fi
+
+    # Notionデータを抽出
     task_name=$(jq -r '.results[0].properties.task_name.title[0].plain_text' "$JSON_FILE")
     assignee=$(jq -r '.results[0].properties.assignee.people[0].name' "$JSON_FILE")
     avatar_url=$(jq -r '.results[0].properties.assignee.people[0].avatar_url' "$JSON_FILE")
@@ -44,7 +50,7 @@ if [ "$service" = "discord" ]; then
     timestamp=$(date "+%Y/%m/%d %H:%M")
     color=$((RANDOM % 16777216))
 
-    # 安全なJSON構築
+    # JSON構築
     payload=$(jq -n \
       --arg title "【$message】$task_name" \
       --arg url "$task_url" \
@@ -66,6 +72,9 @@ if [ "$service" = "discord" ]; then
           }
         }]
       }')
+
+    echo "[DEBUG] Payload to send:"
+    echo "$payload"
 
     curl -s -H "Content-Type: application/json" -X POST -d "$payload" "$DISCORD_WEBHOOK"
 
