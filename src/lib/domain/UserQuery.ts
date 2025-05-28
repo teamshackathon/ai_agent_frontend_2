@@ -30,6 +30,6 @@ function createUser(res: UserResponse): User {
 
 export async function getUser(): Promise<User> {
 	const axiosClient = createAxiosClient();
-	const response = await axiosClient.get<UserResponse>("/auth/me");
+	const response = await axiosClient.get<UserResponse>("/users/me");
 	return createUser(response.data);
 }
