@@ -22,6 +22,9 @@ fi
 # .envを読み込む
 export $(grep -v '^#' .env | xargs)
 
+DISCORD_WEBHOOK=$(echo "$DISCORD_WEBHOOK" | tr -d '\r\n' | xargs)
+echo "[DEBUG] TRIMMED DISCORD_WEBHOOK: \"$DISCORD_WEBHOOK\""
+
 if [ "$service" = "discord" ]; then
     JSON_FILE="response.json"
     url="https://api.notion.com/v1/databases/$NOTION_DATABASE_ID/query"
