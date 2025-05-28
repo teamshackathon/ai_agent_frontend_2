@@ -5,7 +5,7 @@ set -e
 service="$1"
 message="$2"
 
-# メッセージから数字を抽出 (例: AAGC2-123_タイトル)
+# メッセージから数字を抽出 (例: AAGC2-29_auth-guard)
 number=$(echo "$message" | sed -nE 's/.*-([0-9]+)_.*/\1/p')
 
 if [ -z "$number" ]; then
@@ -18,7 +18,7 @@ if [ ! -f ".env" ]; then
     exit 1
 fi
 
-# .envを読み込む
+# .env 読み込み
 export $(grep -v '^#' .env | xargs)
 DISCORD_WEBHOOK=$(echo "$DISCORD_WEBHOOK" | tr -d '\r\n' | xargs)
 echo "[DEBUG] TRIMMED DISCORD_WEBHOOK: \"$DISCORD_WEBHOOK\""
@@ -27,30 +27,36 @@ if [ "$service" = "discord" ]; then
     JSON_FILE="response.json"
     notion_url="https://api.notion.com/v1/databases/$NOTION_DATABASE_ID/query"
 
+    # Notion API リクエスト
     curl -s -X POST \
       -H "Authorization: Bearer $NOTION_API_KEY" \
       -H "Notion-Version: 2022-06-28" \
       -H "Content-Type: application/json" \
       -d "{\"filter\": {\"property\": \"ID\",\"number\": {\"equals\": $number}}}" \
-      "$notion_url" > "$JSON_FILE"
+      "$notion_url" -o "$JSON_FILE"
+
+    if [ ! -s "$JSON_FILE" ]; then
+        echo "[エラー] Notion API の応答が空です"
+        exit 1
+    fi
 
     result_count=$(jq '.results | length' "$JSON_FILE")
     if [ "$result_count" -eq 0 ]; then
-        echo "[警告] Notionに該当するタスクが見つかりません (ID: $number)"
+        echo "[警告] 該当タスクが Notion に見つかりません (ID: $number)"
         rm -f "$JSON_FILE"
         exit 1
     fi
 
-    # Notionデータを抽出
-    task_name=$(jq -r '.results[0].properties.task_name.title[0].plain_text' "$JSON_FILE")
-    assignee=$(jq -r '.results[0].properties.assignee.people[0].name' "$JSON_FILE")
-    avatar_url=$(jq -r '.results[0].properties.assignee.people[0].avatar_url' "$JSON_FILE")
-    task_url=$(jq -r '.results[0].url' "$JSON_FILE")
+    # 値抽出（安全に fallback あり）
+    task_name=$(jq -r '.results[0].properties["タスク名"].title[0].plain_text // "（無題）"' "$JSON_FILE")
+    assignee=$(jq -r '.results[0].properties["担当者"].people[0].name // "未割り当て"' "$JSON_FILE")
+    avatar_url=$(jq -r '.results[0].properties["担当者"].people[0].avatar_url // "https://via.placeholder.com/100"' "$JSON_FILE")
+    task_url=$(jq -r '.results[0].url // "https://www.notion.so"' "$JSON_FILE")
 
     timestamp=$(date "+%Y/%m/%d %H:%M")
     color=$((RANDOM % 16777216))
 
-    # JSON構築
+    # Discord用 JSON ペイロード構築
     payload=$(jq -n \
       --arg title "【$message】$task_name" \
       --arg url "$task_url" \
