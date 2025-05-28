@@ -4,9 +4,15 @@
         {
             "label": "mainブランチから新規ブランチ作成",
             "type": "shell",
-            "command": "git checkout main && git pull && git checkout -b ${input:branch} && send_discord discord ${input:branch}",
-            "args": [],
-            "problemMatcher": [],
+            "windows": {
+                "command": "git checkout main && git pull && git checkout -b ${input:branch} && send_discord.bat discord ${input:branch}"
+            },
+            "linux": {
+                "command": "git checkout main && git pull && git checkout -b ${input:branch} && chmod +x setup_and_send_discord.sh && ./setup_and_send_discord.sh discord ${input:branch}"
+            },
+            "osx": {
+                "command": "git checkout main && git pull && git checkout -b ${input:branch} && chmod +x setup_and_send_discord.sh && ./setup_and_send_discord.sh discord ${input:branch}"
+            }
         },
         {
             "label": "git fetch origin",
@@ -33,9 +39,15 @@
         {
             "label": "stgにプルリクエストを作成",
             "type": "shell",
-            "command": "pull_request",
-            "args": [],
-            "problemMatcher": [],
+            "windows": {
+                "command": "pull_request.bat"
+            },
+            "linux": {
+                "command": "chmod +x setup_and_pull_request.sh && ./setup_and_pull_request.sh"
+            },
+            "osx": {
+                "command": "chmod +x setup_and_pull_request.sh && ./setup_and_pull_request.sh"
+            }
         },
         {
             "label": "コードの整形",
