@@ -1,6 +1,5 @@
-import { JotaiProvider } from "@/app/provider";
-import { ChakraProvider } from "@chakra-ui/react";
 import type { Metadata } from "next";
+import { Providers } from "./provider";
 
 export const metadata: Metadata = {
 	title: "FurniAIzer",
@@ -9,15 +8,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
 	children,
-}: Readonly<{
+}: {
 	children: React.ReactNode;
-}>) {
+}) {
 	return (
 		<html lang="ja" suppressHydrationWarning>
 			<body>
-				<ChakraProvider>
-					<JotaiProvider>{children}</JotaiProvider>
-				</ChakraProvider>
+				<Providers>{children}</Providers>
 			</body>
 		</html>
 	);
