@@ -1,16 +1,6 @@
 "use client";
 
-import {
-	Box,
-	Card,
-	CardBody,
-	CardFooter,
-	CardHeader,
-	Flex,
-	Heading,
-	Spacer,
-	Text,
-} from "@chakra-ui/react";
+import { Card, CardBody, Flex, Spacer, Text } from "@chakra-ui/react";
 
 import { healthCheckLivenessAtomLoadable } from "@/lib/atom/HealthCheckAtom";
 import { healthCheckReadinessAtomLoadable } from "@/lib/atom/HealthCheckAtom";
@@ -30,7 +20,10 @@ import Link from "next/link";
 const StatusBadge = ({
 	check,
 	text,
-}: { check: Loadable<HealthCheckResponse | null>; text: string }) => {
+}: {
+	check: Loadable<HealthCheckResponse | null>;
+	text: string;
+}) => {
 	if (check.state === "loading") {
 		return <Text>Loading...</Text>;
 	}

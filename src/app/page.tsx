@@ -1,11 +1,14 @@
 import Header from "@/app/header";
-import HealthCheckCard from "@/components/organisms/HealthCheckCard";
+import ChatWindow from "@/components/organisms/ChatWindow";
+import { Box } from "@chakra-ui/react";
 
 export default function Home() {
 	return (
-		<div className="flex justify-center">
+		<Box h="100vh" display="flex" flexDirection="column">
 			<Header />
-			<HealthCheckCard />
-		</div>
+			<Box flex="1" overflow="hidden">
+				<ChatWindow />
+			</Box>
+		</Box>
 	);
 }
