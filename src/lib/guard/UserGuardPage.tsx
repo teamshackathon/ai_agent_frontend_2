@@ -1,32 +1,42 @@
+"use client";
+
 import { useAtomValue } from "jotai";
+import { useRouter } from "next/navigation";
+import { Box, Button, Center, Skeleton, Text, VStack } from "@chakra-ui/react";
 
 import { userAtomLoadable } from "@/lib/atom/UserAtom";
 import { useAuthState } from "@/lib/hook/useAuthState";
-
-import { Skeleton } from "@chakra-ui/react";
-import { useRouter } from "next/router";
+import { useFirebaseAuth } from "@/lib/hook/useFirebaseAuth";
 
 const UserGuardPage = ({ children }: { children: React.ReactNode }) => {
-	const { user, loading, idToken } = useAuthState();
-	const userInfo = useAtomValue(userAtomLoadable);
+  const { user, loading, idToken } = useAuthState();
+  const userInfo = useAtomValue(userAtomLoadable);
+  const { loginWithGithub, loading: oauthLoading } = useFirebaseAuth();
+  const router = useRouter();
 
-	const router = useRouter();
+  if (loading || userInfo.state === "loading" || oauthLoading) {
+    return <Skeleton height="100vh" />;
+  }
 
-	if (loading || userInfo.state === "loading") {
-		return <></>;
-	}
+  const isAuthenticated =
+    user && idToken && userInfo.state === "hasData" && userInfo.data;
 
-	if (
-		!loading &&
-		userInfo.state === "hasData" &&
-		(!user || !idToken || !userInfo.data)
-	) {
-		router.push("/");
-	}
+  if (!isAuthenticated) {
+    return (
+      <Center height="100vh">
+        <VStack spacing={6}>
+          <Text fontSize="lg">
+            このページを表示するにはログインが必要です。
+          </Text>
+          <Button colorScheme="blue" onClick={loginWithGithub}>
+            Login with GitHub
+          </Button>
+        </VStack>
+      </Center>
+    );
+  }
 
-	if (user && idToken && userInfo && userInfo.state === "hasData") {
-		return <>{children}</>;
-	}
+  return <>{children}</>;
 };
 
 export default UserGuardPage;
