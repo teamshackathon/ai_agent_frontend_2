@@ -104,12 +104,12 @@ type ChatOutput = {
 
 export async function postMessage(message: Message): Promise<void> {
   const client = createAxiosClient();
-  await client.post<Message, void>("/api/v1/chat", message);
+  await client.post<Message, void>("/chat", message);
 }
 
 export async function fetchMessages(): Promise<Message[]> {
   const client = createAxiosClient();
-  const response = await client.get<Message[]>("/api/v1/chat");
+  const response = await client.get<Message[]>("/chat");
   return response.data;
 }
 
@@ -128,10 +128,7 @@ export async function sendMessage(message: Message, history: Message[]) {
     model_name: "gemini-pro",
   };
 
-  const response = await client.post<ChatInput, ChatOutput>(
-    "/api/v1/chat",
-    payload
-  );
+  const response = await client.post<ChatInput, ChatOutput>("/chat", payload);
 
   return response.data;
 }
