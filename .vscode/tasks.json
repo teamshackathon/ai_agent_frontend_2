@@ -11,8 +11,10 @@
                 "command": "git checkout main && git pull && git checkout ${input:branch} && chmod +x setup_and_send_discord.sh && ./setup_and_send_discord.sh discord ${input:branch}"
             },
             "osx": {
-                "command": "git checkout main && git pull && git checkout ${input:branch} && chmod +x setup_and_send_discord.sh && ./setup_and_send_discord.sh discord ${input:branch}"
-            }
+                "command": "git checkout main && git pull && git checkout -b ${input:branch} && chmod +x setup_and_send_discord.sh && ./setup_and_send_discord.sh discord ${input:branch}"
+            },
+            "args": [],
+            "problemMatcher": [],
         },
         {
             "label": "git fetch origin",
@@ -47,7 +49,9 @@
             },
             "osx": {
                 "command": "chmod +x setup_and_pull_request.sh && ./setup_and_pull_request.sh"
-            }
+            },
+            "args": [],
+            "problemMatcher": [],
         },
         {
             "label": "コードの整形",

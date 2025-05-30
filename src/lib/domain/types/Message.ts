@@ -8,9 +8,9 @@
  * - SYSTEM: システムからのメッセージ（初期化・設定など）
  */
 export const ROLES = Object.freeze({
-	USER: "USER",
-	ASSISTANT: "ASSISTANT",
-	SYSTEM: "SYSTEM",
+	USER: "user",
+	ASSISTANT: "assistant",
+	SYSTEM: "system",
 } as const);
 
 /**
