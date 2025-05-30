@@ -63,9 +63,17 @@
         {
             "label": "フォルダ構成",
             "type": "shell",
-            "command": "tree src /f",
+            "windows": {
+                "command": "tree src /f"
+            },
+            "linux": {
+                "command": "tree src || echo 'tree コマンドが見つかりません。\\n→ sudo apt install tree でインストールできます。'"
+            },
+            "osx": {
+                "command": "tree src || echo 'tree コマンドが見つかりません。\\n→ brew install tree でインストールできます。'"
+            },
             "args": [],
-            "problemMatcher": [],
+            "problemMatcher": []
         }
     ],
     "inputs": [
