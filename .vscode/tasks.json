@@ -5,10 +5,10 @@
             "label": "mainブランチから新規ブランチ作成",
             "type": "shell",
             "windows": {
-                "command": "git checkout main && git pull && git checkout -b ${input:branch} && send_discord.bat discord ${input:branch}"
+                "command": "git checkout main && git pull && git checkout ${input:branch} && send_discord.bat discord ${input:branch}"
             },
             "linux": {
-                "command": "git checkout main && git pull && git checkout -b ${input:branch} && chmod +x setup_and_send_discord.sh && ./setup_and_send_discord.sh discord ${input:branch}"
+                "command": "git checkout main && git pull && git checkout ${input:branch} && chmod +x setup_and_send_discord.sh && ./setup_and_send_discord.sh discord ${input:branch}"
             },
             "osx": {
                 "command": "git checkout main && git pull && git checkout -b ${input:branch} && chmod +x setup_and_send_discord.sh && ./setup_and_send_discord.sh discord ${input:branch}"
