@@ -5,7 +5,7 @@ import { messageErrorAtom } from "@/lib/atom/MessageAtom";
 import { UI_CONFIG } from "@/lib/constants/uiConfig";
 import { ROLES, generateMessage } from "@/lib/domain/MessageQuery";
 import { useSendMessage } from "@/lib/hook/useSendMessage";
-import { Box, Flex, Spinner } from "@chakra-ui/react";
+import { Box, Flex, Spacer, Spinner } from "@chakra-ui/react";
 import { useAtom } from "jotai";
 import { useEffect, useRef, useState } from "react";
 import CtrlEnter from "../atoms/message/CtrlEnter";
@@ -50,12 +50,16 @@ export default function ChatWindow() {
 	}
 
 	return (
-		<Box {...UI_CONFIG.chatWindow.outer}>
-			<Box {...UI_CONFIG.chatWindow.output}>
+		<Box>
+			<Box
+				overflowY="auto"
+				h="calc(100vh - 250px)" // Adjust height as needed
+				w="100%"
+			>
 				<ChatOutput messages={messages} bottomRef={bottomRef} />
 			</Box>
 
-			<Box {...UI_CONFIG.chatWindow.input}>
+			<Box>
 				<ChatInput
 					value={input}
 					onChange={setInput}
