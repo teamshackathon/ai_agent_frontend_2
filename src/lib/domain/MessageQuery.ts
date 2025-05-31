@@ -1,4 +1,6 @@
-// lib/domain/types/message.ts
+// lib/domain/MessageQuery.ts
+
+import { createAxiosClient } from "../infrastructure/AxiosClient";
 
 /**
  * チャット内で使用するロール定数。
@@ -61,3 +63,72 @@ export type Message = {
 	/** LLMからの元レスポンス全体を保持するフィールド（デバッグ/解析用・任意）*/
 	rawResponse?: unknown;
 };
+
+/**
+ * メッセージを生成する関数。
+ * @param text - メッセージ本文
+ * @param role - 発言者のロール（ユーザー/アシスタント/システム）
+ * @param options - その他の追加フィールド（rawResponseなど）
+ * @returns 生成されたメッセージオブジェクト
+ */
+export function generateMessage(
+	text: string,
+	role: Role,
+	options: Partial<Omit<Message, "id" | "text" | "role" | "timeStamp">> = {},
+): Message {
+	return {
+		id: crypto.randomUUID(),
+		text,
+		role,
+		timeStamp: new Date(),
+		...options,
+	};
+}
+
+type ChatMessage = {
+	role: string;
+	content: string;
+};
+
+type ChatInput = {
+	role: string;
+	response: string;
+	history: ChatMessage[];
+	model_name?: string | null;
+};
+
+type ChatOutput = {
+	role: string;
+	response: string;
+};
+
+export async function postMessage(message: Message): Promise<void> {
+	const client = createAxiosClient();
+	await client.post<Message, void>("/chat", message);
+}
+
+export async function fetchMessages(): Promise<Message[]> {
+	const client = createAxiosClient();
+	const response = await client.get<Message[]>("/chat");
+	return response.data;
+}
+
+export async function sendMessage(message: Message, history: Message[]) {
+	const client = createAxiosClient();
+
+	const apiHistory: ChatMessage[] = history.map((msg) => ({
+		role: msg.role,
+		content: msg.text ?? "",
+	}));
+
+	const payload: ChatInput = {
+		role: message.role,
+		response: message.text ?? "",
+		history: apiHistory,
+		model_name: "gemini-pro",
+	};
+
+	const response = await client.post<ChatInput, ChatOutput>("/chat", payload);
+
+	return response.data;
+}
