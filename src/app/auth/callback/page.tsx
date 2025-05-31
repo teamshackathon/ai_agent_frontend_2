@@ -39,7 +39,7 @@ function AuthCallbackContent() {
 				const success = await handleCallback(token);
 
 				if (success) {
-					router.push("/");
+					router.push("/chat");
 				} else {
 					setError("認証に失敗しました");
 				}
