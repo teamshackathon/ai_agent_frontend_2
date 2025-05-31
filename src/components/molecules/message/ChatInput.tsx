@@ -44,7 +44,6 @@ export default function ChatInput({
 				<Flex justify="flex-end">
 					<SendButton
 						isSending={isSending}
-						type="submit"
 						disabled={isSending || value.trim() === ""}
 					/>
 				</Flex>

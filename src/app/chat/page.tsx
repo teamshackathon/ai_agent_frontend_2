@@ -35,57 +35,57 @@ export default function Chat() {
 		<Box maxH="100%">
 			<Header />
 			<Box h={"100%"}>
-				<UserGuardPage>
-					<PanelGroup direction="horizontal" style={{ height: "100%" }}>
-						<Panel
-							ref={ref}
-							defaultSize={70}
-							minSize={50}
-							maxSize={80}
-							onResize={handleLeftPanelResize}
-						>
-							<Box m={5} overflow="auto">
-								<Tabs>
-									<TabList>
-										<Tab>チャット</Tab>
-										<Tab>VR内見</Tab>
-									</TabList>
+				{/* <UserGuardPage> */}
+				<PanelGroup direction="horizontal" style={{ height: "100%" }}>
+					<Panel
+						ref={ref}
+						defaultSize={70}
+						minSize={50}
+						maxSize={80}
+						onResize={handleLeftPanelResize}
+					>
+						<Box m={5} overflow="auto">
+							<Tabs>
+								<TabList>
+									<Tab>チャット</Tab>
+									<Tab>VR内見</Tab>
+								</TabList>
 
-									<TabPanels>
-										<TabPanel>
-											<ChatWindow />
-										</TabPanel>
-										<TabPanel>
-											<Scene />
-										</TabPanel>
-									</TabPanels>
-								</Tabs>
-							</Box>
-						</Panel>
+								<TabPanels>
+									<TabPanel>
+										<ChatWindow />
+									</TabPanel>
+									<TabPanel>
+										<Scene />
+									</TabPanel>
+								</TabPanels>
+							</Tabs>
+						</Box>
+					</Panel>
 
-						<PanelResizeHandle>
-							<Box
-								width="6px"
-								height="100%"
-								bg="blue.500"
-								cursor="col-resize"
-								_hover={{ bg: "blue.600" }}
-								_active={{ bg: "blue.700" }}
-							/>
-						</PanelResizeHandle>
+					<PanelResizeHandle>
+						<Box
+							width="6px"
+							height="100%"
+							bg="blue.500"
+							cursor="col-resize"
+							_hover={{ bg: "blue.600" }}
+							_active={{ bg: "blue.700" }}
+						/>
+					</PanelResizeHandle>
 
-						<Panel
-							defaultSize={30}
-							minSize={20}
-							maxSize={50}
-							onResize={handleRightPanelResize}
-						>
-							<Box p={5} h="100%" overflow="auto">
-								<ProgressStepper />
-							</Box>
-						</Panel>
-					</PanelGroup>
-				</UserGuardPage>
+					<Panel
+						defaultSize={30}
+						minSize={20}
+						maxSize={50}
+						onResize={handleRightPanelResize}
+					>
+						<Box p={5} h="100%" overflow="auto">
+							<ProgressStepper />
+						</Box>
+					</Panel>
+				</PanelGroup>
+				{/* </UserGuardPage> */}
 			</Box>
 		</Box>
 	);
