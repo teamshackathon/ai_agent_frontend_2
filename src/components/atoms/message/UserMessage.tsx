@@ -1,7 +1,7 @@
 // components/atoms/message/UserMessage.tsx
 
 import { UI_CONFIG } from "@/lib/constants/uiConfig";
-import type { Message } from "@/lib/domain/types/Message";
+import type { Message } from "@/lib/domain/MessageQuery";
 import { Box, Flex, Text } from "@chakra-ui/react";
 
 export const UserMessage = ({ message }: { message: Message }) => {

@@ -5,10 +5,10 @@
             "label": "mainブランチから新規ブランチ作成",
             "type": "shell",
             "windows": {
-                "command": "git checkout main && git pull && git checkout ${input:branch} && send_discord.bat discord ${input:branch}"
+                "command": "git checkout main && git pull && git checkout -b ${input:branch} && send_discord.bat discord ${input:branch}"
             },
             "linux": {
-                "command": "git checkout main && git pull && git checkout ${input:branch} && chmod +x setup_and_send_discord.sh && ./setup_and_send_discord.sh discord ${input:branch}"
+                "command": "git checkout main && git pull && git checkout -b ${input:branch} && chmod +x setup_and_send_discord.sh && ./setup_and_send_discord.sh discord ${input:branch}"
             },
             "osx": {
                 "command": "git checkout main && git pull && git checkout -b ${input:branch} && chmod +x setup_and_send_discord.sh && ./setup_and_send_discord.sh discord ${input:branch}"
@@ -59,6 +59,21 @@
             "command": "npm run format:fix && npm run lint:fix && npm run check:fix",
             "args": [],
             "problemMatcher": [],
+        },
+        {
+            "label": "フォルダ構成",
+            "type": "shell",
+            "windows": {
+                "command": "tree src /f"
+            },
+            "linux": {
+                "command": "tree src || echo 'tree コマンドが見つかりません。\\n→ sudo apt install tree でインストールできます。'"
+            },
+            "osx": {
+                "command": "tree src || echo 'tree コマンドが見つかりません。\\n→ brew install tree でインストールできます。'"
+            },
+            "args": [],
+            "problemMatcher": []
         }
     ],
     "inputs": [

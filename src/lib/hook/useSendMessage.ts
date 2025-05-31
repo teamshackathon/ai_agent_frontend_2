@@ -1,71 +1,35 @@
-import { type Message, ROLES } from "@/lib/domain/types/Message";
-import { getFirebaseAuth } from "@/lib/firebase";
-import { getIdToken } from "firebase/auth";
-import { useState } from "react";
-import { generateMessage } from "../domain/usecases/message/generateMessage";
+// lib/hook/useSendMessage.ts
+
+import { useAtom, useSetAtom } from "jotai";
+import { messageListAtom } from "../atom/MessageAtom";
+import { isSendingAtom, messageErrorAtom } from "../atom/MessageAtom";
+import { type Message, ROLES, generateMessage } from "../domain/MessageQuery";
+import { sendMessage } from "../domain/MessageQuery";
 
 export function useSendMessage() {
-	const [isSending, setIsSending] = useState(false);
-	const [error, setError] = useState<Error | null>(null);
+	const [messages, setMessages] = useAtom(messageListAtom);
+	const setIsSending = useSetAtom(isSendingAtom);
+	const setError = useSetAtom(messageErrorAtom);
 
-	const send = async (
-		userMessage: Message,
-		history: Message[],
-	): Promise<Message | null> => {
+	const send = async (userMsg: Message): Promise<void> => {
 		setIsSending(true);
 		setError(null);
-		const auth = getFirebaseAuth();
-		const user = auth.currentUser;
-
-		if (!user) {
-			setError(new Error("ログインが必要です"));
-			setIsSending(false);
-			return null;
-		}
-
 		try {
-			const idToken = await getIdToken(user);
-
-			const apiHistory = [...history, userMessage].map((msg) => ({
-				role: msg.role,
-				content: msg.text ?? "",
-			}));
-
-			const res = await fetch(
-				`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/chat`,
-				{
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${idToken}`,
-					},
-					body: JSON.stringify({
-						role: "user",
-						response: userMessage.text,
-						history: apiHistory,
-						model_name: "gemini-pro",
-					}),
-				},
-			);
-
-			if (!res.ok) {
-				const errorText = await res.text();
-				throw new Error(`送信失敗: ${res.status} ${errorText}`);
-			}
-
-			const data = await res.json();
-			return generateMessage(data.response, ROLES.ASSISTANT, {
-				rawResponse: data,
+			const history: Message[] = messages;
+			setMessages((prev) => [...prev, userMsg]);
+			const output = await sendMessage(userMsg, history);
+			const asstMsg = generateMessage(output.response, ROLES.ASSISTANT, {
+				rawResponse: output,
 			});
+			setMessages((prev) => [...prev, asstMsg]);
 		} catch (err) {
 			setError(
 				err instanceof Error ? err : new Error("送信中にエラーが発生しました"),
 			);
-			return null;
 		} finally {
 			setIsSending(false);
 		}
 	};
 
-	return { send, isSending, error };
+	return { send };
 }

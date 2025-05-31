@@ -4,7 +4,7 @@ import { AssistantMessage } from "@/components/atoms/message/AssistantMessage";
 import { SystemMessage } from "@/components/atoms/message/SystemMessage";
 import { UserMessage } from "@/components/atoms/message/UserMessage";
 import { UI_CONFIG } from "@/lib/constants/uiConfig";
-import { type Message, ROLES } from "@/lib/domain/types/Message";
+import { type Message, ROLES } from "@/lib/domain/MessageQuery";
 import { Box, VStack } from "@chakra-ui/react";
 
 export const ChatOutput = ({
