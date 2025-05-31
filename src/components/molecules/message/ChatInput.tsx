@@ -35,13 +35,12 @@ export default function ChatInput({
 			bg={useColorModeValue("gray.100", "gray.700")}
 			{...UI_CONFIG.chatInput.style}
 		>
-			<Flex direction="column" gap={2}>
+			<Flex gap={2}>
 				<MessageArea
 					value={value}
 					onChange={(e) => onChange(e.target.value)}
 					ref={textareaRef}
 				/>
-				<Divider orientation="horizontal" />
 				<Flex justify="flex-end">
 					<SendButton
 						isSending={isSending}

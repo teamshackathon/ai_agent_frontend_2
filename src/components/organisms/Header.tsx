@@ -1,6 +1,7 @@
 "use client";
 
 import { useAtomValue } from "jotai";
+import Link from "next/link";
 
 import { userAtomLoadable } from "@/lib/atom/UserAtom";
 import { useAuthState } from "@/lib/hook/useAuthState";
@@ -33,7 +34,6 @@ import { MdOutlineEmail } from "react-icons/md";
 
 const UserMenu = () => {
 	const user = useAtomValue(userAtomLoadable);
-	console.log("UserMenu user:", user);
 
 	const { logout } = useFirebaseAuth();
 
@@ -90,18 +90,7 @@ const UserMenu = () => {
 
 export default function Header() {
 	const { user, loading } = useAuthState();
-	const { loginWithGithub, loading: oauthLoading } = useFirebaseAuth();
-
-	if (oauthLoading) {
-		return (
-			<Center minH="100vh">
-				<VStack spacing={4}>
-					<Spinner size="xl" color="blue.500" thickness="4px" />
-					<Text fontSize="lg">認証ページへ移動します...</Text>
-				</VStack>
-			</Center>
-		);
-	}
+	const userInfo = useAtomValue(userAtomLoadable);
 
 	return (
 		<Flex bg={"lightblue"} alignItems="center" p={1}>
@@ -114,14 +103,18 @@ export default function Header() {
 			<Box mr={5}>
 				{loading ? (
 					<Skeleton>
-						<Button onClick={loginWithGithub}>Login with GitHub</Button>
+						<Button px={8} as={Link} href={"/login"}>
+							ログインする
+						</Button>
 					</Skeleton>
-				) : user ? (
+				) : user && userInfo.state === "hasData" && userInfo.data ? (
 					<Box>
 						<UserMenu />
 					</Box>
 				) : (
-					<Button onClick={loginWithGithub}>Login with GitHub</Button>
+					<Button px={8} as={Link} href={"/login"}>
+						ログインする
+					</Button>
 				)}
 			</Box>
 		</Flex>
