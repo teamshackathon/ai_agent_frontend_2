@@ -4,89 +4,76 @@ import ChatWindow from "@/components/organisms/ChatWindow";
 import Header from "@/components/organisms/Header";
 import ProgressStepper from "@/components/organisms/ProgressStepper";
 import Scene from "@/components/organisms/VR";
-import UserGuardPage from "@/lib/guard/UserGuardPage";
-import { Box, Flex, Text } from "@chakra-ui/react";
-import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/react";
+import { Box, Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/react";
 import { useRef, useState } from "react";
 import {
-	type ImperativePanelHandle,
-	Panel,
-	PanelGroup,
-	PanelResizeHandle,
+  type ImperativePanelHandle,
+  Panel,
+  PanelGroup,
+  PanelResizeHandle,
 } from "react-resizable-panels";
 
 export default function Chat() {
-	const ref = useRef<ImperativePanelHandle>(null);
+  const ref = useRef<ImperativePanelHandle>(null);
+  const [tabIndex, setTabIndex] = useState(0);
 
-	// ローカルステートでサイズを追跡する方法
-	const [leftPanelSize, setLeftPanelSize] = useState<number>(70);
-	const [rightPanelSize, setRightPanelSize] = useState<number>(30);
+  return (
+    <Box h="100vh" display="flex" flexDirection="column" overflow="hidden">
+      {/* ヘッダー */}
+      <Box flexShrink={0}>
+        <Header />
+      </Box>
 
-	// パネルのリサイズイベントを処理するハンドラー
-	const handleLeftPanelResize = (size: number) => {
-		setLeftPanelSize(size);
-	};
+      {/* パネルグループ（左右分割リサイズ対応） */}
+      <PanelGroup direction="horizontal" style={{ flex: 1 }}>
+        {/* 左パネル（チャット＋VR） */}
+        <Panel defaultSize={80} minSize={40} maxSize={85} ref={ref}>
+          <Box h="100%" overflow="hidden" display="flex" flexDirection="column">
+            <Tabs
+              index={tabIndex}
+              onChange={setTabIndex}
+              isFitted
+              flex="1"
+              display="flex"
+              flexDirection="column"
+              variant="enclosed"
+            >
+              <TabList>
+                <Tab>チャット</Tab>
+                <Tab>VR内見</Tab>
+              </TabList>
 
-	const handleRightPanelResize = (size: number) => {
-		setRightPanelSize(size);
-	};
+              <TabPanels flex="1" overflow="hidden">
+                <TabPanel p={0} h="100%">
+                  <ChatWindow />
+                </TabPanel>
+                <TabPanel p={0} h="100%">
+                  <Scene />
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
+          </Box>
+        </Panel>
 
-	return (
-		<Box maxH="100%">
-			<Header />
-			<Box h={"100%"}>
-				{/* <UserGuardPage> */}
-				<PanelGroup direction="horizontal" style={{ height: "100%" }}>
-					<Panel
-						ref={ref}
-						defaultSize={70}
-						minSize={50}
-						maxSize={80}
-						onResize={handleLeftPanelResize}
-					>
-						<Box m={5} overflow="auto">
-							<Tabs>
-								<TabList>
-									<Tab>チャット</Tab>
-									<Tab>VR内見</Tab>
-								</TabList>
+        {/* リサイズハンドル */}
+        <PanelResizeHandle>
+          <Box
+            width="6px"
+            height="100%"
+            bg="blue.500"
+            cursor="col-resize"
+            _hover={{ bg: "blue.600" }}
+            _active={{ bg: "blue.700" }}
+          />
+        </PanelResizeHandle>
 
-								<TabPanels>
-									<TabPanel>
-										<ChatWindow />
-									</TabPanel>
-									<TabPanel>
-										<Scene />
-									</TabPanel>
-								</TabPanels>
-							</Tabs>
-						</Box>
-					</Panel>
-
-					<PanelResizeHandle>
-						<Box
-							width="6px"
-							height="100%"
-							bg="blue.500"
-							cursor="col-resize"
-							_hover={{ bg: "blue.600" }}
-							_active={{ bg: "blue.700" }}
-						/>
-					</PanelResizeHandle>
-
-					<Panel
-						defaultSize={30}
-						minSize={20}
-						maxSize={50}
-						onResize={handleRightPanelResize}
-					>
-						<Box p={5} h="100%" overflow="auto">
-							<ProgressStepper />
-						</Box>
-					</Panel>
-				</PanelGroup>
-				{/* </UserGuardPage> */}
-			</Box>
-		</Box>
-	);
+        {/* 右パネル（ProgressStepper） */}
+        <Panel defaultSize={20} minSize={15} maxSize={60}>
+          <Box h="100%" p={4} overflowY="auto" borderLeft="1px solid #ddd">
+            <ProgressStepper />
+          </Box>
+        </Panel>
+      </PanelGroup>
+    </Box>
+  );
 }
