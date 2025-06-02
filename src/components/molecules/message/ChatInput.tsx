@@ -41,9 +41,9 @@ export default function ChatInput({
         onSend();
       }}
       bg={useColorModeValue("gray.100", "gray.700")}
-      style={chatInputStyle}
+      {...chatInputStyle}
     >
-      <Flex gap={2}>
+      <Flex gap={1}>
         <MessageArea
           value={value}
           onChange={(e) => onChange(e.target.value)}
