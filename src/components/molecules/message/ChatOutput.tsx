@@ -28,6 +28,7 @@ export const ChatOutput = ({
         flex="1"
         overflowY="auto" // ✅ スクロール可能に
         px={2}
+        pt={3}
         sx={scrollbarStyle}
       >
         {messages.slice().map((message) => {
