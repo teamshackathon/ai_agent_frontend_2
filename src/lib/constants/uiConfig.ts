@@ -14,12 +14,6 @@ export const scrollbarStyle = {
   },
 };
 
-export const messageFlex = {
-  width: "full" as const,
-  justify: "flex-end" as const,
-  my: 1,
-};
-
 export const messageBox = {
   px: 4,
   py: 1,
