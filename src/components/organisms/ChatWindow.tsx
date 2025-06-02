@@ -1,8 +1,9 @@
+// components/prganisms/ChatWindow.tsx
+
 "use client";
 
 import { isSendingAtom, messageListAtom } from "@/lib/atom/MessageAtom";
 import { messageErrorAtom } from "@/lib/atom/MessageAtom";
-import { UI_CONFIG } from "@/lib/constants/uiConfig";
 import { ROLES, generateMessage } from "@/lib/domain/MessageQuery";
 import { useSendMessage } from "@/lib/hook/useSendMessage";
 import { Box, Flex, Spacer, Spinner } from "@chakra-ui/react";
@@ -43,16 +44,29 @@ export default function ChatWindow() {
   // Spinner表示
   if (!mounted) {
     return (
-      <Flex {...UI_CONFIG.chatWindow.Loading.flex}>
-        <Spinner {...UI_CONFIG.chatWindow.Loading.spinner} />
+      <Flex
+        position={"fixed"}
+        inset={0}
+        justify={"center"}
+        align={"center"}
+        bg={"white"}
+        zIndex={100}
+      >
+        <Spinner
+          size="xl"
+          thickness="4px"
+          emptyColor="gray.200"
+          color="blue.500"
+          speed="1s"
+        />
       </Flex>
     );
   }
 
   return (
-    <Flex direction="column" h="100%">
+    <Flex direction="column" h="100%" minH={0}>
       {/* チャットエリア */}
-      <Box flex="1" overflowY="auto" px={4}>
+      <Box flex="1" overflowY="hidden" px={4}>
         <ChatOutput messages={messages} bottomRef={bottomRef} />
       </Box>
 
