@@ -1,18 +1,20 @@
 // lib/hook/useEvent.ts
 
-import { useRef, useEffect, useCallback } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
-export function useEvent<T extends (...args: any[]) => void>(handler: T): T {
-  const handlerRef = useRef(handler);
+/**
+ * 最新の関数を安定して使えるようにする汎用フック
+ */
+export function useEvent<TArgs extends unknown[], TReturn>(
+	handler: (...args: TArgs) => TReturn,
+): (...args: TArgs) => TReturn {
+	const handlerRef = useRef(handler);
 
-  useEffect(() => {
-    handlerRef.current = handler;
-  }, [handler]);
+	useEffect(() => {
+		handlerRef.current = handler;
+	}, [handler]);
 
-  return useCallback(
-    ((...args) => {
-      return handlerRef.current(...args);
-    }) as T,
-    []
-  );
+	return useCallback((...args: TArgs) => {
+		return handlerRef.current(...args);
+	}, []);
 }
