@@ -78,7 +78,7 @@ export default function ChatWindow() {
           onSend={handleSend}
           isSending={isSending}
         />
-        <CtrlEnter onSend={handleSend} />
+        <CtrlEnter onSend={handleSend} isSending={isSending} />
       </Box>
     </Flex>
   );
