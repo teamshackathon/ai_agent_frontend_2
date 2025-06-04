@@ -3,7 +3,7 @@
 import { AssistantMessage } from "@/components/atoms/message/AssistantMessage";
 import { SystemMessage } from "@/components/atoms/message/SystemMessage";
 import { UserMessage } from "@/components/atoms/message/UserMessage";
-import { UI_CONFIG } from "@/lib/constants/uiConfig";
+import { scrollbarStyle } from "@/lib/constants/uiConfig";
 import { type Message, ROLES } from "@/lib/domain/MessageQuery";
 import { Box, VStack } from "@chakra-ui/react";
 
@@ -15,8 +15,22 @@ export const ChatOutput = ({
 	bottomRef: React.RefObject<HTMLDivElement | null>;
 }) => {
 	return (
-		<Box {...UI_CONFIG.chatOutput.style}>
-			<VStack {...UI_CONFIG.chatOutput.vStack}>
+		<Box
+			h="100%"
+			display="flex"
+			flexDirection="column"
+			flex="1"
+			overflow="hidden"
+		>
+			<VStack
+				spacing={1}
+				align="stretch"
+				flex="1"
+				overflowY="auto" // ✅ スクロール可能に
+				px={2}
+				pt={3}
+				sx={scrollbarStyle}
+			>
 				{messages.slice().map((message) => {
 					switch (message.role) {
 						case ROLES.USER:

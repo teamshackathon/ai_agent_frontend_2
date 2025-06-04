@@ -1,3 +1,5 @@
+// app/components/organisms/Header.tsx
+
 "use client";
 
 import { useAtomValue } from "jotai";

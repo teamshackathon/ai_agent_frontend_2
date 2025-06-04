@@ -1,39 +1,30 @@
 // components/atoms/message/CtrlEnter.tsx
 
-import { useEffect, useRef } from "react";
+import { useEvent } from "@/lib/hook/useEvent";
+import { useEffect } from "react";
 
 type Props = {
 	onSend: () => void;
+	isSending: boolean;
 };
 
 /**
  * Ctrl(Cmd) + Enterを押したときにメッセージを送信するコンポーネント
  */
-export default function CtrlEnter({ onSend }: Props) {
-	// onSendをrefに保存しておく
-	const onSendRef = useRef(onSend);
-
-	// onSendが変更されたときにrefを更新
-	useEffect(() => {
-		onSendRef.current = onSend;
-	}, [onSend]);
+export default function CtrlEnter({ onSend, isSending }: Props) {
+	const handleKeyDown = useEvent<[KeyboardEvent], void>((e) => {
+		if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+			e.preventDefault();
+			if (!isSending) onSend();
+		}
+	});
 
 	// コンポーネントがマウントされたときにのみイベントリスナーを登録
 	// Ctrl(Cmd) + Enterを押したときにonSendを呼び出す
 	useEffect(() => {
-		const handleKeyDown = (e: KeyboardEvent) => {
-			if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
-				e.preventDefault();
-				onSendRef.current();
-			}
-		};
-
 		window.addEventListener("keydown", handleKeyDown);
-
-		return () => {
-			window.removeEventListener("keydown", handleKeyDown);
-		};
-	}, []);
+		return () => window.removeEventListener("keydown", handleKeyDown);
+	}, [handleKeyDown]);
 
 	return null;
 }

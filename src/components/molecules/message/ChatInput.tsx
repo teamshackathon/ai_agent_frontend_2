@@ -2,8 +2,7 @@
 
 import MessageArea from "@/components/atoms/message/MessageArea";
 import SendButton from "@/components/atoms/message/SendButton";
-import { UI_CONFIG } from "@/lib/constants/uiConfig";
-import { Box, Divider, Flex, useColorModeValue } from "@chakra-ui/react";
+import { Box, Flex, useColorModeValue } from "@chakra-ui/react";
 import { useEffect, useRef } from "react";
 
 type Props = {
@@ -11,6 +10,15 @@ type Props = {
 	onChange: (val: string) => void;
 	onSend: () => void;
 	isSending: boolean;
+};
+
+const chatInputStyle = {
+	overflow: "visible" as const,
+	borderRadius: "2xl",
+	px: 2,
+	py: 0,
+	w: "full",
+	boxShadow: "md",
 };
 
 export default function ChatInput({
@@ -33,9 +41,9 @@ export default function ChatInput({
 				onSend();
 			}}
 			bg={useColorModeValue("gray.100", "gray.700")}
-			{...UI_CONFIG.chatInput.style}
+			{...chatInputStyle}
 		>
-			<Flex gap={2}>
+			<Flex gap={1}>
 				<MessageArea
 					value={value}
 					onChange={(e) => onChange(e.target.value)}
