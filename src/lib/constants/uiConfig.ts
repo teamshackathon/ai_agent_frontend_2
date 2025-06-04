@@ -1,6 +1,3 @@
-import { Loader, Send } from "lucide-react";
-import type { CSSProperties } from "react";
-
 export const scrollbarStyle = {
 	"&::-webkit-scrollbar": {
 		width: "8px",
