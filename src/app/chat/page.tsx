@@ -12,6 +12,7 @@ import {
 	TabPanel,
 	TabPanels,
 	Tabs,
+	Text,
 } from "@chakra-ui/react";
 import { useRef, useState } from "react";
 import {
@@ -31,13 +32,18 @@ export default function Chat() {
 				<Header />
 			</Box>
 
-			{/* 👇 flex + minH=0 で PanelGroup に正しい高さ伝播 */}
 			<Flex flex="1" minH={0}>
 				<PanelGroup
 					direction="horizontal"
 					style={{ width: "100%", height: "100%" }}
 				>
-					<Panel defaultSize={80} minSize={40} maxSize={85} ref={ref}>
+					<Panel defaultSize={25} minSize={15} maxSize={40}>
+						<Text>{"家具リスト"}</Text>
+					</Panel>
+					<PanelResizeHandle>
+						<Box width="4px" height="100%" bg="blue.500" />
+					</PanelResizeHandle>
+					<Panel defaultSize={60} minSize={30} maxSize={70} ref={ref}>
 						<Box
 							h="100%"
 							overflow="hidden"
@@ -72,10 +78,10 @@ export default function Chat() {
 					</Panel>
 
 					<PanelResizeHandle>
-						<Box width="6px" height="100%" bg="blue.500" />
+						<Box width="4px" height="100%" bg="blue.500" />
 					</PanelResizeHandle>
 
-					<Panel defaultSize={20} minSize={15} maxSize={60}>
+					<Panel defaultSize={15} minSize={15} maxSize={30}>
 						<Box h="100%" p={4} overflowY="auto" borderLeft="1px solid #ddd">
 							<ProgressStepper />
 						</Box>
