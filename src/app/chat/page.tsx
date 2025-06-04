@@ -4,9 +4,15 @@ import ChatWindow from "@/components/organisms/ChatWindow";
 import Header from "@/components/organisms/Header";
 import ProgressStepper from "@/components/organisms/ProgressStepper";
 import Scene from "@/components/organisms/VR";
-import UserGuardPage from "@/lib/guard/UserGuardPage";
-import { Box, Flex, Text } from "@chakra-ui/react";
-import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/react";
+import {
+	Box,
+	Flex,
+	Tab,
+	TabList,
+	TabPanel,
+	TabPanels,
+	Tabs,
+} from "@chakra-ui/react";
 import { useRef, useState } from "react";
 import {
 	type ImperativePanelHandle,
@@ -17,45 +23,47 @@ import {
 
 export default function Chat() {
 	const ref = useRef<ImperativePanelHandle>(null);
-
-	// ローカルステートでサイズを追跡する方法
-	const [leftPanelSize, setLeftPanelSize] = useState<number>(70);
-	const [rightPanelSize, setRightPanelSize] = useState<number>(30);
-
-	// パネルのリサイズイベントを処理するハンドラー
-	const handleLeftPanelResize = (size: number) => {
-		setLeftPanelSize(size);
-	};
-
-	const handleRightPanelResize = (size: number) => {
-		setRightPanelSize(size);
-	};
+	const [tabIndex, setTabIndex] = useState(0);
 
 	return (
-		<Box maxH="100%">
-			<Header />
-			<Box h={"100%"}>
-				{/* <UserGuardPage> */}
-				<PanelGroup direction="horizontal" style={{ height: "100%" }}>
-					<Panel
-						ref={ref}
-						defaultSize={70}
-						minSize={50}
-						maxSize={80}
-						onResize={handleLeftPanelResize}
-					>
-						<Box m={5} overflow="auto">
-							<Tabs>
+		<Box h="100vh" display="flex" flexDirection="column" overflow="hidden">
+			<Box flexShrink={0}>
+				<Header />
+			</Box>
+
+			{/* 👇 flex + minH=0 で PanelGroup に正しい高さ伝播 */}
+			<Flex flex="1" minH={0}>
+				<PanelGroup
+					direction="horizontal"
+					style={{ width: "100%", height: "100%" }}
+				>
+					<Panel defaultSize={80} minSize={40} maxSize={85} ref={ref}>
+						<Box
+							h="100%"
+							overflow="hidden"
+							display="flex"
+							flexDirection="column"
+						>
+							<Tabs
+								index={tabIndex}
+								onChange={setTabIndex}
+								isFitted
+								flex="1"
+								display="flex"
+								flexDirection="column"
+								overflow="hidden"
+								variant="enclosed"
+							>
 								<TabList>
 									<Tab>チャット</Tab>
 									<Tab>VR内見</Tab>
 								</TabList>
 
-								<TabPanels>
-									<TabPanel>
+								<TabPanels flex="1" h="100%" minH={0} overflow="hidden">
+									<TabPanel p={0} h="100%" overflow="hidden">
 										<ChatWindow />
 									</TabPanel>
-									<TabPanel>
+									<TabPanel p={0} h="100%" overflow="hidden">
 										<Scene />
 									</TabPanel>
 								</TabPanels>
@@ -64,29 +72,16 @@ export default function Chat() {
 					</Panel>
 
 					<PanelResizeHandle>
-						<Box
-							width="6px"
-							height="100%"
-							bg="blue.500"
-							cursor="col-resize"
-							_hover={{ bg: "blue.600" }}
-							_active={{ bg: "blue.700" }}
-						/>
+						<Box width="6px" height="100%" bg="blue.500" />
 					</PanelResizeHandle>
 
-					<Panel
-						defaultSize={30}
-						minSize={20}
-						maxSize={50}
-						onResize={handleRightPanelResize}
-					>
-						<Box p={5} h="100%" overflow="auto">
+					<Panel defaultSize={20} minSize={15} maxSize={60}>
+						<Box h="100%" p={4} overflowY="auto" borderLeft="1px solid #ddd">
 							<ProgressStepper />
 						</Box>
 					</Panel>
 				</PanelGroup>
-				{/* </UserGuardPage> */}
-			</Box>
+			</Flex>
 		</Box>
 	);
 }
