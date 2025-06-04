@@ -26,11 +26,9 @@ export default function Chat() {
 	const ref = useRef<ImperativePanelHandle>(null);
 	const [tabIndex, setTabIndex] = useState(0);
 
-	// 🔽 追加: 画像ファイルとプレビューURL
 	const [imageFile, setImageFile] = useState<File | null>(null);
 	const [imagePreview, setImagePreview] = useState<string | null>(null);
 
-	// 🔽 追加: グローバルの drag & drop ハンドリング
 	useEffect(() => {
 		const handleDrop = (e: DragEvent) => {
 			e.preventDefault();
@@ -40,16 +38,35 @@ export default function Chat() {
 				setImagePreview(URL.createObjectURL(file));
 			}
 		};
-		const prevent = (e: DragEvent) => e.preventDefault();
+
+		const handlePaste = (e: ClipboardEvent) => {
+			const items = e.clipboardData?.items;
+			if (!items) return;
+			for (const item of items) {
+				if (item.kind === "file" && item.type.startsWith("image/")) {
+					const file = item.getAsFile();
+					if (file) {
+						setImageFile(file);
+						setImagePreview(URL.createObjectURL(file));
+						break;
+					}
+				}
+			}
+		};
+
+		const prevent = (e: Event) => e.preventDefault();
 
 		window.addEventListener("drop", handleDrop);
 		window.addEventListener("dragover", prevent);
+		window.addEventListener("paste", handlePaste);
 
 		return () => {
 			window.removeEventListener("drop", handleDrop);
 			window.removeEventListener("dragover", prevent);
+			window.removeEventListener("paste", handlePaste);
 		};
 	}, []);
+
 	return (
 		<Box h="100vh" display="flex" flexDirection="column" overflow="hidden">
 			<Box flexShrink={0}>
