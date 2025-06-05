@@ -1,9 +1,13 @@
 "use client";
 
 import ChatWindow from "@/components/organisms/ChatWindow";
+import FurnitureWindow from "@/components/organisms/FurnitureWindow";
 import Header from "@/components/organisms/Header";
+import MovingWindow from "@/components/organisms/MovingWindow";
 import ProgressStepper from "@/components/organisms/ProgressStepper";
+import PropertyWindow from "@/components/organisms/PropertyWindow";
 import Scene from "@/components/organisms/VR";
+import { stepAtom } from "@/lib/atom/StepAtom";
 import {
 	Box,
 	Flex,
@@ -14,6 +18,7 @@ import {
 	Tabs,
 	Text,
 } from "@chakra-ui/react";
+import { useAtom } from "jotai";
 import { useRef, useState } from "react";
 import {
 	type ImperativePanelHandle,
@@ -25,6 +30,23 @@ import {
 export default function Chat() {
 	const ref = useRef<ImperativePanelHandle>(null);
 	const [tabIndex, setTabIndex] = useState(0);
+	const [step, setStep] = useAtom(stepAtom);
+	const handleNext = () => {
+		setStep((prev) => (prev + 1) % 3); // 0→1→2→0 循環
+	};
+
+	const renderLeftPanel = () => {
+		switch (step) {
+			case 0:
+				return <PropertyWindow onNext={handleNext} />;
+			case 1:
+				return <FurnitureWindow onNext={handleNext} />;
+			case 2:
+				return <MovingWindow onNext={handleNext} />;
+			default:
+				return null;
+		}
+	};
 
 	return (
 		<Box h="100vh" display="flex" flexDirection="column" overflow="hidden">
@@ -38,7 +60,7 @@ export default function Chat() {
 					style={{ width: "100%", height: "100%" }}
 				>
 					<Panel defaultSize={25} minSize={15} maxSize={40}>
-						<Text>{"家具リスト"}</Text>
+						<Box p={4}>{renderLeftPanel()}</Box>
 					</Panel>
 					<PanelResizeHandle>
 						<Box width="4px" height="100%" bg="blue.500" />
