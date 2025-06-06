@@ -19,7 +19,7 @@ import {
 	Text,
 } from "@chakra-ui/react";
 import { useAtom } from "jotai";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
 	type ImperativePanelHandle,
 	Panel,
@@ -30,6 +30,47 @@ import {
 export default function Chat() {
 	const ref = useRef<ImperativePanelHandle>(null);
 	const [tabIndex, setTabIndex] = useState(0);
+
+	const [imageFile, setImageFile] = useState<File | null>(null);
+	const [imagePreview, setImagePreview] = useState<string | null>(null);
+
+	useEffect(() => {
+		const handleDrop = (e: DragEvent) => {
+			e.preventDefault();
+			const file = e.dataTransfer?.files?.[0];
+			if (file?.type.startsWith("image/")) {
+				setImageFile(file);
+				setImagePreview(URL.createObjectURL(file));
+			}
+		};
+
+		const handlePaste = (e: ClipboardEvent) => {
+			const items = e.clipboardData?.items;
+			if (!items) return;
+			for (const item of items) {
+				if (item.kind === "file" && item.type.startsWith("image/")) {
+					const file = item.getAsFile();
+					if (file) {
+						setImageFile(file);
+						setImagePreview(URL.createObjectURL(file));
+						break;
+					}
+				}
+			}
+		};
+
+		const prevent = (e: Event) => e.preventDefault();
+
+		window.addEventListener("drop", handleDrop);
+		window.addEventListener("dragover", prevent);
+		window.addEventListener("paste", handlePaste);
+
+		return () => {
+			window.removeEventListener("drop", handleDrop);
+			window.removeEventListener("dragover", prevent);
+			window.removeEventListener("paste", handlePaste);
+		};
+	}, []);
 	const [step, setStep] = useAtom(stepAtom);
 	const handleNext = () => {
 		setStep((prev) => (prev + 1) % 3); // 0→1→2→0 循環
@@ -62,9 +103,11 @@ export default function Chat() {
 					<Panel defaultSize={25} minSize={15} maxSize={40}>
 						<Box p={4}>{renderLeftPanel()}</Box>
 					</Panel>
+
 					<PanelResizeHandle>
 						<Box width="4px" height="100%" bg="blue.500" />
 					</PanelResizeHandle>
+
 					<Panel defaultSize={60} minSize={30} maxSize={70} ref={ref}>
 						<Box
 							h="100%"
@@ -89,7 +132,18 @@ export default function Chat() {
 
 								<TabPanels flex="1" h="100%" minH={0} overflow="hidden">
 									<TabPanel p={0} h="100%" overflow="hidden">
-										<ChatWindow />
+										<ChatWindow
+											imageFile={imageFile}
+											imagePreview={imagePreview}
+											onImageSelect={(file, previewUrl) => {
+												setImageFile(file);
+												setImagePreview(previewUrl);
+											}}
+											onImageClear={() => {
+												setImageFile(null);
+												setImagePreview(null);
+											}}
+										/>
 									</TabPanel>
 									<TabPanel p={0} h="100%" overflow="hidden">
 										<Scene />

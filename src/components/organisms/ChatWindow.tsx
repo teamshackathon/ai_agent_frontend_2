@@ -1,19 +1,28 @@
-// components/prganisms/ChatWindow.tsx
-
 "use client";
 
 import { isSendingAtom, messageListAtom } from "@/lib/atom/MessageAtom";
-import { messageErrorAtom } from "@/lib/atom/MessageAtom";
 import { ROLES, generateMessage } from "@/lib/domain/MessageQuery";
 import { useSendMessage } from "@/lib/hook/useSendMessage";
-import { Box, Flex, Spacer, Spinner } from "@chakra-ui/react";
+import { Box, Flex, Spinner } from "@chakra-ui/react";
 import { useAtom } from "jotai";
 import { useEffect, useRef, useState } from "react";
 import CtrlEnter from "../atoms/message/CtrlEnter";
 import ChatInput from "../molecules/message/ChatInput";
 import { ChatOutput } from "../molecules/message/ChatOutput";
 
-export default function ChatWindow() {
+type Props = {
+	imageFile?: File | null;
+	imagePreview?: string | null;
+	onImageSelect?: (file: File, previewUrl: string) => void;
+	onImageClear?: () => void;
+};
+
+export default function ChatWindow({
+	imageFile,
+	imagePreview,
+	onImageSelect,
+	onImageClear,
+}: Props) {
 	const [input, setInput] = useState("");
 	const [messages] = useAtom(messageListAtom);
 	const [mounted, setMounted] = useState(false);
@@ -21,27 +30,32 @@ export default function ChatWindow() {
 	const bottomRef = useRef<HTMLDivElement>(null);
 	const { send } = useSendMessage();
 
-	// 読み込み時のSpinnerセット用
 	useEffect(() => {
 		const timer = setTimeout(() => setMounted(true), 100);
 		return () => clearTimeout(timer);
 	}, []);
 
-	// 新しいメッセージが追加されたときに自動でスクロール
 	useEffect(() => {
-		// useEffect内でmessagesを使わないとLintで怒られる
 		if (messages.length === 0) return;
 		bottomRef.current?.scrollIntoView({ behavior: "smooth" });
 	}, [messages]);
 
 	const handleSend = async () => {
-		if (!input.trim()) return;
+		if (!input.trim() && !imageFile) return;
+
 		const userMessage = generateMessage(input.trim(), ROLES.USER);
+
+		// 🔽 画像ファイルがある場合はログ（API拡張ポイント）
+		if (imageFile) {
+			console.log("送信画像あり:", imageFile);
+		}
+
 		setInput("");
+		onImageClear?.();
+
 		await send(userMessage);
 	};
 
-	// Spinner表示
 	if (!mounted) {
 		return (
 			<Flex
@@ -65,18 +79,18 @@ export default function ChatWindow() {
 
 	return (
 		<Flex direction="column" h="100%" minH={0}>
-			{/* チャットエリア */}
 			<Box flex="1" overflowY="hidden" px={4}>
 				<ChatOutput messages={messages} bottomRef={bottomRef} />
 			</Box>
 
-			{/* 入力欄 */}
 			<Box p={2} pb={6}>
 				<ChatInput
 					value={input}
 					onChange={setInput}
 					onSend={handleSend}
 					isSending={isSending}
+					imagePreview={imagePreview}
+					onImageSelect={onImageSelect}
 				/>
 				<CtrlEnter onSend={handleSend} isSending={isSending} />
 			</Box>
