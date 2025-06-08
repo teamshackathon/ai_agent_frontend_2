@@ -1,26 +1,22 @@
 "use client";
 
-import { Box, Button, Center, Skeleton, Text, VStack } from "@chakra-ui/react";
+import { Button, Center, Skeleton, Text, VStack } from "@chakra-ui/react";
 import { useAtomValue } from "jotai";
-import { useRouter } from "next/navigation";
 
-import { userAtomLoadable } from "@/lib/atom/UserAtom";
-import { useAuthState } from "@/lib/hook/useAuthState";
 import Link from "next/link";
+import { isLoadingAuthAtom } from "../atom/AuthAtom";
+import { isUserLoadingAtom, userAtom } from "../atom/UserAtom";
 
 const UserGuardPage = ({ children }: { children: React.ReactNode }) => {
-	const { user, loading, idToken } = useAuthState();
-	const userInfo = useAtomValue(userAtomLoadable);
-	const router = useRouter();
+	const user = useAtomValue(userAtom);
+	const loading = useAtomValue(isUserLoadingAtom);
+	const authLoading = useAtomValue(isLoadingAuthAtom);
 
-	if (loading || userInfo.state === "loading") {
+	if (loading || authLoading) {
 		return <Skeleton height="100vh" />;
 	}
 
-	const isAuthenticated =
-		user && idToken && userInfo.state === "hasData" && userInfo.data;
-
-	if (!isAuthenticated) {
+	if (!user) {
 		return (
 			<Center>
 				<VStack spacing={6}>

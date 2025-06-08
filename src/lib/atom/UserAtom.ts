@@ -1,23 +1,42 @@
-import { getUser } from "@/lib/domain/UserQuery";
-import type { User } from "firebase/auth";
+import {
+	type User,
+	type UserUpdateRequest,
+	getUser,
+	updateUser,
+} from "@/lib/domain/UserQuery";
 import { atom } from "jotai";
-import { loadable } from "jotai/utils";
 
-export const userAtom = atom<User | null>(null);
+export const userAtom = atom<User | null | undefined>(undefined);
 
-export const userAtomAsync = atom(async (get) => {
+export const isUserLoadingAtom = atom<boolean>(false);
+
+// write only atom
+// ユーザー情報を取得するためのatom
+export const getUserAtom = atom(null, async (_, set) => {
+	set(isUserLoadingAtom, true);
 	try {
-		const user = get(userAtom);
-		// userがnullの場合は、nullを返す
-		if (!user) {
-			return null;
-		}
-		const response = await getUser();
-		return response;
+		const res = await getUser();
+		set(userAtom, res);
 	} catch (error) {
-		console.error("Error fetching user:", error);
-		return null;
+		set(userAtom, null);
+		console.error("Failed to fetch user data:", error);
+	} finally {
+		set(isUserLoadingAtom, false);
 	}
 });
 
-export const userAtomLoadable = loadable(userAtomAsync);
+// ユーザー情報を更新するためのatom
+export const updateUserAtom = atom(
+	null,
+	async (_, set, user: UserUpdateRequest) => {
+		set(isUserLoadingAtom, true);
+		try {
+			const updatedUser = await updateUser(user);
+			set(userAtom, updatedUser);
+		} catch (error) {
+			console.error("Failed to update user data:", error);
+		} finally {
+			set(isUserLoadingAtom, false);
+		}
+	},
+);

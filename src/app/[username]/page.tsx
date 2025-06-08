@@ -21,20 +21,11 @@ import {
 } from "@chakra-ui/react";
 import { FaEnvelope, FaUserCircle } from "react-icons/fa";
 
-import { userAtomLoadable } from "@/lib/atom/UserAtom";
+import { userAtom } from "@/lib/atom/UserAtom";
 import UserGuard from "@/lib/guard/UserGuard";
-import { useLoadable } from "@/lib/hook/useLoadable";
-
-// ユーザー情報の型定義
-interface UserProfile {
-	id: string;
-	display_name: string;
-	email: string;
-	photo_url: string;
-}
 
 export default function UserProfilePage() {
-	const user = useLoadable(userAtomLoadable);
+	const user = useAtomValue(userAtom);
 
 	// 背景色とボーダーカラーをテーマに基づいて設定
 	const bgColor = useColorModeValue("white", "gray.800");
@@ -62,8 +53,8 @@ export default function UserProfilePage() {
 							>
 								<Avatar
 									size="2xl"
-									name={user?.displayName}
-									src={user?.photoURL}
+									name={user?.name || "ユーザー"}
+									src={user?.avatarUrl || ""}
 									border="4px solid"
 									borderColor="blue.400"
 									mb={{ base: 4, md: 0 }}
@@ -75,7 +66,7 @@ export default function UserProfilePage() {
 									textAlign={{ base: "center", md: "left" }}
 								>
 									<Heading size="xl" fontWeight="bold" color={textColor}>
-										{user?.displayName}
+										{user?.name}
 									</Heading>
 
 									<HStack
@@ -92,17 +83,6 @@ export default function UserProfilePage() {
 										>
 											Developer
 										</Badge>
-										{user?.id.includes("github") && (
-											<Badge
-												colorScheme="green"
-												fontSize="0.8em"
-												px={2}
-												py={1}
-												borderRadius="full"
-											>
-												GitHub
-											</Badge>
-										)}
 									</HStack>
 								</Stack>
 							</Flex>

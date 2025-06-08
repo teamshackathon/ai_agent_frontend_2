@@ -1,23 +1,24 @@
+"use client";
+
 import { useAtomValue } from "jotai";
 
-import { userAtomLoadable } from "@/lib/atom/UserAtom";
-import { useAuthState } from "@/lib/hook/useAuthState";
-
-import { Skeleton } from "@chakra-ui/react";
+import { isLoadingAuthAtom } from "../atom/AuthAtom";
+import { isUserLoadingAtom, userAtom } from "../atom/UserAtom";
 
 const UserGuard = ({ children }: { children: React.ReactNode }) => {
-	const { user, loading, idToken } = useAuthState();
-	const userInfo = useAtomValue(userAtomLoadable);
+	const user = useAtomValue(userAtom);
+	const loading = useAtomValue(isUserLoadingAtom);
+	const authLoading = useAtomValue(isLoadingAuthAtom);
 
-	if (loading) {
+	if (loading || authLoading) {
 		return <></>;
 	}
 
-	if (!user || !idToken || !userInfo) {
+	if (!user) {
 		return <></>;
 	}
 
-	if (user && idToken && userInfo && userInfo.state === "hasData") {
+	if (user) {
 		return <>{children}</>;
 	}
 };
