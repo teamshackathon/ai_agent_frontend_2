@@ -4,7 +4,6 @@ import { Card, CardBody, Flex, Spacer, Text } from "@chakra-ui/react";
 
 import { healthCheckLivenessAtomLoadable } from "@/lib/atom/HealthCheckAtom";
 import { healthCheckReadinessAtomLoadable } from "@/lib/atom/HealthCheckAtom";
-import { userAtomLoadable } from "@/lib/atom/UserAtom";
 
 import type { HealthCheckResponse } from "@/lib/domain/HealthCheckQuery";
 import { useAtomValue } from "jotai";
@@ -55,8 +54,6 @@ const HealthCheckCard = () => {
 	const liveness = useAtomValue(healthCheckLivenessAtomLoadable);
 	const readiness = useAtomValue(healthCheckReadinessAtomLoadable);
 
-	const user = useLoadable(userAtomLoadable);
-
 	return (
 		<Card w="100%" maxW="200px" m={4} p={4} borderRadius="lg" boxShadow="md">
 			<CardBody>
@@ -69,13 +66,6 @@ const HealthCheckCard = () => {
 					<Text mt={4} fontSize="sm" color="gray.500">
 						あなたはログインしています。
 					</Text>
-					{user && (
-						<Link href={`/${user.id}`}>
-							<Text mt={2} color="blue.500" textDecoration="underline">
-								MYページへ移動
-							</Text>
-						</Link>
-					)}
 				</UserGuard>
 			</CardBody>
 		</Card>

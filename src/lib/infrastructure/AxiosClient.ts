@@ -4,8 +4,6 @@ import axios, {
 	type AxiosResponse,
 } from "axios";
 
-import { getFirebaseAuth } from "@/lib/firebase";
-
 export class AxiosClient {
 	private axiosInstance: AxiosInstance;
 
@@ -19,48 +17,7 @@ export class AxiosClient {
 		});
 
 		// リクエストインターセプターを設定
-		this.axiosInstance.interceptors.request.use(
-			async (config) => {
-				// 認証トークンをリクエストに追加
-				const token = await this.getFirebaseToken();
-				if (token) {
-					config.headers.Authorization = `Bearer ${token}`;
-				}
-				return config;
-			},
-			(error) => {
-				return Promise.reject(error);
-			},
-		);
-
-		this.axiosInstance.interceptors.response.use(
-			(response) => {
-				return response;
-			},
-			async (error) => {
-				const originalRequest = error.config;
-
-				// 401エラーの場合とリトライフラグが立っていない場合
-				if (error.response?.status === 401 && !originalRequest._retry) {
-					originalRequest._retry = true;
-
-					// 現在のAuthorizationヘッダーがないかチェック
-					const currentAuth = originalRequest.headers?.Authorization;
-					if (!currentAuth || !currentAuth.startsWith("Bearer ")) {
-						// 新しいトークンを取得
-						const token = await this.getFirebaseToken();
-						if (token) {
-							// 新しいトークンを設定
-							originalRequest.headers.Authorization = `Bearer ${token}`;
-							// リクエストを再試行
-							return this.axiosInstance(originalRequest);
-						}
-					}
-				}
-
-				return Promise.reject(error);
-			},
-		);
+		this.setupInterceptors();
 	}
 
 	async get<T>(url: string): Promise<AxiosResponse<T>> {
@@ -94,8 +51,18 @@ export class AxiosClient {
 		return response;
 	}
 
+	async login<T, U>(url: string, data: T): Promise<AxiosResponse<U>> {
+		const response = await this.axiosInstance.post<U>(
+			url,
+			data,
+			this.loginRequestConfig,
+		);
+		return response;
+	}
+
 	private baseURL: string =
-		process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
+		process.env.NEXT_PUBLIC_API_URL ||
+		"http://host.docker.internal:8000/api/v1";
 
 	private get recequestConfig(): AxiosRequestConfig {
 		return {
@@ -107,21 +74,57 @@ export class AxiosClient {
 		};
 	}
 
-	private async getFirebaseToken(): Promise<string | null> {
-		try {
-			const auth = getFirebaseAuth();
-			const currentUser = auth.currentUser;
+	private get loginRequestConfig(): AxiosRequestConfig {
+		return {
+			baseURL: this.baseURL,
+			headers: {
+				"Content-Type": "application/x-www-form-urlencoded",
+			},
+		};
+	}
 
-			if (!currentUser) {
-				return null;
-			}
+	private setupInterceptors() {
+		// リクエスト送信前に実行
+		this.axiosInstance.interceptors.request.use(
+			(config) => {
+				// ローカルストレージからトークンを取得し、ダブルクォーテーションを除去
+				if (typeof window !== "undefined") {
+					const rawToken = localStorage.getItem("ht_sb_auth_token");
+					let token = null;
 
-			const token = await currentUser.getIdToken(true);
-			return token;
-		} catch (error) {
-			console.error("Firebase IDトークン取得エラー:", error);
-			return null;
-		}
+					if (rawToken) {
+						// ダブルクォーテーションを除去
+						token = rawToken.replace(/^"|"$/g, "");
+					}
+
+					// トークンがある場合はAuthorizationヘッダーに設定
+					if (token && config.headers) {
+						config.headers.Authorization = `Bearer ${token}`;
+					}
+				}
+
+				return config;
+			},
+			(error) => {
+				return Promise.reject(error);
+			},
+		);
+
+		// レスポンス受信時に実行
+		this.axiosInstance.interceptors.response.use(
+			(response) => {
+				return response;
+			},
+			(error) => {
+				// 401エラー（認証エラー）の場合
+				if (error.response && error.response.status === 401) {
+					// ここに認証切れの処理を追加
+					// 例: リフレッシュトークンの処理やログアウト処理
+					console.error("認証エラー: トークンが無効または期限切れです");
+				}
+				return Promise.reject(error);
+			},
+		);
 	}
 }
 
