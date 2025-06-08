@@ -2,12 +2,8 @@
 
 "use client";
 
-import { useAtomValue } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import Link from "next/link";
-
-import { userAtomLoadable } from "@/lib/atom/UserAtom";
-import { useAuthState } from "@/lib/hook/useAuthState";
-import { useFirebaseAuth } from "@/lib/hook/useFirebaseAuth";
 
 import {
 	Avatar,
@@ -31,68 +27,55 @@ import {
 	MenuList,
 } from "@chakra-ui/react";
 
+import { isLoadingAuthAtom, logoutAtom } from "@/lib/atom/AuthAtom";
+import { userAtom } from "@/lib/atom/UserAtom";
 import { FaRegUser } from "react-icons/fa";
 import { MdOutlineEmail } from "react-icons/md";
 
 const UserMenu = () => {
-	const user = useAtomValue(userAtomLoadable);
+	const user = useAtomValue(userAtom);
+	const logout = useSetAtom(logoutAtom);
 
-	const { logout } = useFirebaseAuth();
-
-	if (!user) {
-		return null;
-	}
-
-	if (user.state === "loading") {
-		return (
-			<Skeleton>
-				<Button>Loading...</Button>
-			</Skeleton>
-		);
-	}
-
-	if (user.state === "hasData" && user.data) {
-		return (
-			<Menu>
-				<MenuButton
-					as={Button}
-					rounded="full"
-					variant="link"
-					cursor="pointer"
-					minW={0}
-				>
-					<Avatar
-						size="md"
-						name={user.data.displayName}
-						src={user.data.photoURL}
-					/>
-				</MenuButton>
-				<MenuList>
-					<MenuGroup title="ユーザー情報">
-						<Flex alignItems="center" mx={2} mb={2}>
-							<Icon as={FaRegUser} boxSize={5} color="gray.500" />
-							<Text ml={2} fontSize="sm">
-								{user.data.displayName}
-							</Text>
-						</Flex>
-						<Flex alignItems="center" mx={2} mb={2}>
-							<Icon as={MdOutlineEmail} boxSize={5} color="gray.500" />
-							<Text ml={2} fontSize="sm">
-								{user.data.email}
-							</Text>
-						</Flex>
-					</MenuGroup>
-					<MenuDivider />
-					<MenuItem onClick={logout}>ログアウト</MenuItem>
-				</MenuList>
-			</Menu>
-		);
-	}
+	return (
+		<Menu>
+			<MenuButton
+				as={Button}
+				rounded="full"
+				variant="link"
+				cursor="pointer"
+				minW={0}
+			>
+				<Avatar
+					size="md"
+					name={user?.name || "ゲストユーザー"}
+					src={user?.avatarUrl || ""}
+				/>
+			</MenuButton>
+			<MenuList>
+				<MenuGroup title="ユーザー情報">
+					<Flex alignItems="center" mx={2} mb={2}>
+						<Icon as={FaRegUser} boxSize={5} color="gray.500" />
+						<Text ml={2} fontSize="sm">
+							{user?.name}
+						</Text>
+					</Flex>
+					<Flex alignItems="center" mx={2} mb={2}>
+						<Icon as={MdOutlineEmail} boxSize={5} color="gray.500" />
+						<Text ml={2} fontSize="sm">
+							{user?.email}
+						</Text>
+					</Flex>
+				</MenuGroup>
+				<MenuDivider />
+				<MenuItem onClick={logout}>ログアウト</MenuItem>
+			</MenuList>
+		</Menu>
+	);
 };
 
 export default function Header() {
-	const { user, loading } = useAuthState();
-	const userInfo = useAtomValue(userAtomLoadable);
+	const user = useAtomValue(userAtom);
+	const isLoading = useAtomValue(isLoadingAuthAtom);
 
 	return (
 		<Flex bg={"lightblue"} alignItems="center" p={1}>
@@ -103,13 +86,13 @@ export default function Header() {
 			</Box>
 			<Spacer />
 			<Box mr={5}>
-				{loading ? (
+				{isLoading ? (
 					<Skeleton>
 						<Button px={8} as={Link} href={"/login"}>
 							ログインする
 						</Button>
 					</Skeleton>
-				) : user && userInfo.state === "hasData" && userInfo.data ? (
+				) : user ? (
 					<Box>
 						<UserMenu />
 					</Box>

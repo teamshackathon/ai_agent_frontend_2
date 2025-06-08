@@ -1,6 +1,6 @@
 "use client";
 
-import { useFirebaseAuth } from "@/lib/hook/useFirebaseAuth";
+import { isLoadingAuthAtom, loginInGithubAtom } from "@/lib/atom/AuthAtom";
 import {
 	Box,
 	Button,
@@ -20,6 +20,7 @@ import {
 	Text,
 	VStack,
 } from "@chakra-ui/react";
+import { useAtomValue, useSetAtom } from "jotai";
 import Link from "next/link";
 import { useState } from "react";
 import { FaEye, FaEyeSlash, FaGithub } from "react-icons/fa";
@@ -61,9 +62,10 @@ export default function LoginPage() {
 		setShowPassword(!showPassword);
 	};
 
-	const { loginWithGithub, loading: oauthLoading } = useFirebaseAuth();
+	const loginInGithub = useSetAtom(loginInGithubAtom);
+	const isLoadingAuth = useAtomValue(isLoadingAuthAtom);
 
-	if (oauthLoading) {
+	if (isLoadingAuth) {
 		return (
 			<Center minH="100vh">
 				<VStack spacing={4}>
@@ -158,7 +160,7 @@ export default function LoginPage() {
 						width="full"
 						leftIcon={<Icon as={FaGithub} />}
 						isLoading={isLoading}
-						onClick={loginWithGithub}
+						onClick={loginInGithub}
 						variant="outline"
 					>
 						GitHubでログイン

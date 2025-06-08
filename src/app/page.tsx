@@ -1,8 +1,7 @@
 "use client";
 
 import Header from "@/components/organisms/Header";
-import UserGuardPage from "@/lib/guard/UserGuardPage";
-import { useAuthState } from "@/lib/hook/useAuthState";
+import { userAtom } from "@/lib/atom/UserAtom";
 import {
 	Badge,
 	Box,
@@ -19,6 +18,7 @@ import {
 	Text,
 	VStack,
 } from "@chakra-ui/react";
+import { useAtomValue } from "jotai";
 import Link from "next/link";
 import {
 	FaArrowRight,
@@ -30,8 +30,7 @@ import {
 import type { IconType } from "react-icons/lib";
 
 export default function Landing() {
-	const { user } = useAuthState();
-	console.log("user", user);
+	const user = useAtomValue(userAtom);
 
 	return (
 		<Box minH="100vh" display="flex" flexDirection="column">
