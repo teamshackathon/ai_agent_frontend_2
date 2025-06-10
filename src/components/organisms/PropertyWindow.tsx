@@ -1,6 +1,4 @@
-// components/organisms/PropertyWindow.tsx
-
-import { useState } from "react";
+import { useState, useRef } from "react";
 import {
   Box,
   SimpleGrid,
@@ -21,21 +19,32 @@ type Props = {
 
 export default function PropertyWindow({ properties, onNext }: Props) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
-
+  const containerRef = useRef<HTMLDivElement>(null);
   const columns = useBreakpointValue({ base: 1, sm: 2, md: 3 }) ?? 3;
+
+  const handleCardClick = (id: string) => {
+    setSelectedId((prev) => (prev === id ? null : id));
+  };
+
+  const handleClickOutside = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === containerRef.current) {
+      setSelectedId(null);
+    }
+  };
 
   const rows = [];
   for (let i = 0; i < properties.length; i += columns) {
     const rowItems = properties.slice(i, i + columns);
     const hasSelected = rowItems.some((p) => p.id === selectedId);
+
     rows.push(
-      <SimpleGrid key={`row-${i}`} columns={columns} spacing={4} mb={2}>
+      <SimpleGrid key={`row-${i}`} minChildWidth="280px" spacing={4} mb={2}>
         {rowItems.map((property) => (
           <PropertyCard
             key={property.id}
             property={property}
-            isDimmed={selectedId !== null && selectedId !== property.id}
-            onClick={() => setSelectedId(property.id)}
+            isDimmed={!!selectedId && selectedId !== property.id}
+            onClick={() => handleCardClick(property.id)}
           />
         ))}
       </SimpleGrid>
@@ -58,18 +67,28 @@ export default function PropertyWindow({ properties, onNext }: Props) {
               {selected.name}
             </Heading>
             <Text color="gray.500">{selected.address}</Text>
-            <Text mt={2}>{selected.description}</Text>
+            <Text mt={2} whiteSpace="pre-wrap">
+              {selected.description}
+            </Text>
+            <Button mt={4} colorScheme="blue" onClick={onNext}>
+              この物件を選択して次へ進む
+            </Button>
           </Box>
         );
       }
     }
   }
+
   return (
-    <>
+    <Box
+      ref={containerRef}
+      onClick={handleClickOutside}
+      height="100%"
+      overflowY="auto"
+    >
       <Container maxW="6xl" py={6}>
         {rows}
       </Container>
-      <Button onClick={onNext}>次に遷移</Button>
-    </>
+    </Box>
   );
 }

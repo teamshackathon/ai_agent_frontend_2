@@ -27,7 +27,7 @@ const dummyProperties: Property[] = [
       "https://www.prime-corporation.co.jp/app/uploads/sites/702/2024/03/0000000001128028412410000442601_10.jpg",
     address: "東京都豊島区池袋二丁目77番1号",
     description:
-      "最上階角部屋 \n 2面バルコニー \n 3口コンロでゆとりのあるキッチンスペース \n 宅配BOX完備で荷物の受け取りもスムーズ \n 申し込み受付中 お気軽にお問い合わせください",
+      "最上階角部屋 2面バルコニー 3口コンロでゆとりのあるキッチンスペース 宅配BOX完備で荷物の受け取りもスムーズ 申し込み受付中 お気軽にお問い合わせください",
   },
   {
     id: "2",
@@ -40,6 +40,60 @@ const dummyProperties: Property[] = [
   },
   {
     id: "3",
+    name: "ジオエント池袋",
+    imageUrl:
+      "https://img.miraie-net.com/?v=l1SV8o4KiTGN67Vi6xp8yAaXh-hSvBzvt3EFwYViQGuFdX87PbDNo00JNJEYXM9AjusFTUUtGFr95lcXcm2jd_uFPk5j0Ghf8QmmmWPV2CVQV2OdZlOlQhGp1KmwQ0PN",
+    address: "東京都豊島区南池袋二丁目32番5号",
+    description:
+      "ジオエント池袋は、東京都豊島区南池袋２丁目に位置し、東京メトロ有楽町線 東池袋駅やＪＲ山手線 池袋駅、東京メトロ丸ノ内線 池袋駅、都電荒川線 都電雑司ヶ谷駅へのアクセスが良好な立地です。鉄筋コンクリート造りの13階建てで、耐久性や防音性に優れた安心の建物です。オートロックやエレベーター、宅配BOX、インターネット接続可などの設備が整っており、安心で暮らしやすい建物として人気です。周辺にはまいばすけっとやセブンイレブン、ファミリーマートなどの便利な店舗が揃っています。ジオエント池袋は、快適な生活を求める方におすすめの物件です。",
+  },
+  {
+    id: "4",
+    name: "Rajah Court",
+    imageUrl:
+      "https://www.prime-corporation.co.jp/app/uploads/sites/702/2024/03/0000000001128028412410000442601_10.jpg",
+    address: "東京都豊島区池袋二丁目77番1号",
+    description:
+      "最上階角部屋 2面バルコニー 3口コンロでゆとりのあるキッチンスペース 宅配BOX完備で荷物の受け取りもスムーズ 申し込み受付中 お気軽にお問い合わせください",
+  },
+  {
+    id: "5",
+    name: "JMFレジデンス池袋一丁目",
+    imageUrl:
+      "https://www.jmf-reit.com/portfolio/ri4lk7000000230t-img/ri4lk7000000234h.jpg",
+    address: "東京都豊島区池袋一丁目16番15号",
+    description:
+      "本物件は、「池袋」駅より徒歩9分の住宅エリアに立地しています。駅周辺には大型百貨店や家電量販店等の他、多数の飲食店が集積しており、本物件周辺にもミニスーパーや大型ディスカウントストアが存していることから、生活利便性は良好です。本物件は、2022年11月に竣工した12階建の新築マンションで、全戸（44戸）30㎡超の1LDKタイプです。コロナ禍で多様化した働き方に対応し、1階の共用部にはワークスペースが設置されています。",
+  },
+  {
+    id: "6",
+    name: "ジオエント池袋",
+    imageUrl:
+      "https://img.miraie-net.com/?v=l1SV8o4KiTGN67Vi6xp8yAaXh-hSvBzvt3EFwYViQGuFdX87PbDNo00JNJEYXM9AjusFTUUtGFr95lcXcm2jd_uFPk5j0Ghf8QmmmWPV2CVQV2OdZlOlQhGp1KmwQ0PN",
+    address: "東京都豊島区南池袋二丁目32番5号",
+    description:
+      "ジオエント池袋は、東京都豊島区南池袋２丁目に位置し、東京メトロ有楽町線 東池袋駅やＪＲ山手線 池袋駅、東京メトロ丸ノ内線 池袋駅、都電荒川線 都電雑司ヶ谷駅へのアクセスが良好な立地です。鉄筋コンクリート造りの13階建てで、耐久性や防音性に優れた安心の建物です。オートロックやエレベーター、宅配BOX、インターネット接続可などの設備が整っており、安心で暮らしやすい建物として人気です。周辺にはまいばすけっとやセブンイレブン、ファミリーマートなどの便利な店舗が揃っています。ジオエント池袋は、快適な生活を求める方におすすめの物件です。",
+  },
+  {
+    id: "7",
+    name: "Rajah Court",
+    imageUrl:
+      "https://www.prime-corporation.co.jp/app/uploads/sites/702/2024/03/0000000001128028412410000442601_10.jpg",
+    address: "東京都豊島区池袋二丁目77番1号",
+    description:
+      "最上階角部屋 2面バルコニー 3口コンロでゆとりのあるキッチンスペース 宅配BOX完備で荷物の受け取りもスムーズ 申し込み受付中 お気軽にお問い合わせください",
+  },
+  {
+    id: "8",
+    name: "JMFレジデンス池袋一丁目",
+    imageUrl:
+      "https://www.jmf-reit.com/portfolio/ri4lk7000000230t-img/ri4lk7000000234h.jpg",
+    address: "東京都豊島区池袋一丁目16番15号",
+    description:
+      "本物件は、「池袋」駅より徒歩9分の住宅エリアに立地しています。駅周辺には大型百貨店や家電量販店等の他、多数の飲食店が集積しており、本物件周辺にもミニスーパーや大型ディスカウントストアが存していることから、生活利便性は良好です。本物件は、2022年11月に竣工した12階建の新築マンションで、全戸（44戸）30㎡超の1LDKタイプです。コロナ禍で多様化した働き方に対応し、1階の共用部にはワークスペースが設置されています。",
+  },
+  {
+    id: "9",
     name: "ジオエント池袋",
     imageUrl:
       "https://img.miraie-net.com/?v=l1SV8o4KiTGN67Vi6xp8yAaXh-hSvBzvt3EFwYViQGuFdX87PbDNo00JNJEYXM9AjusFTUUtGFr95lcXcm2jd_uFPk5j0Ghf8QmmmWPV2CVQV2OdZlOlQhGp1KmwQ0PN",
@@ -125,7 +179,9 @@ export default function Chat() {
             style={{ width: "100%", height: "100%" }}
           >
             <Panel defaultSize={65} minSize={30} maxSize={80}>
-              <Box p={4}>{renderLeftPanel()}</Box>
+              <Box p={4} height="100%" overflowY="auto">
+                {renderLeftPanel()}
+              </Box>
             </Panel>
 
             <PanelResizeHandle>
