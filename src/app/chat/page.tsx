@@ -234,7 +234,7 @@ export default function Chat() {
             style={{ width: "100%", height: "100%" }}
           >
             <Panel defaultSize={65} minSize={30} maxSize={80}>
-              <Box p={4} height="100%" overflowY="auto">
+              <Box height="100%" overflowY="auto" width="100%">
                 {renderLeftPanel()}
               </Box>
             </Panel>
@@ -264,10 +264,6 @@ export default function Chat() {
                 />
               </Box>
             </Panel>
-
-            <PanelResizeHandle>
-              <Box width="4px" height="100%" bg="blue.500" />
-            </PanelResizeHandle>
           </PanelGroup>
         </Flex>
       </Box>

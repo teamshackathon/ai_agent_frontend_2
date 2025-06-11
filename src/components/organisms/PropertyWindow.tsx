@@ -1,93 +1,69 @@
-import { PropertyCard } from "@/components/molecules/property/PropertyCard";
 import type { Property } from "@/lib/domain/PropertyQuery";
-import {
-	Box,
-	Button,
-	Container,
-	Heading,
-	SimpleGrid,
-	Text,
-	useBreakpointValue,
-} from "@chakra-ui/react";
-import { useRef, useState } from "react";
+import { Box, Button, Heading, Icon, SimpleGrid, Text } from "@chakra-ui/react";
+import { ArrowBackIcon } from "@chakra-ui/icons";
+import { useState } from "react";
+import { PropertyCard } from "@/components/molecules/property/PropertyCard";
 
 type Props = {
-	properties: Property[];
-	onNext: () => void;
+  properties: Property[];
+  onNext: () => void;
 };
 
 export default function PropertyWindow({ properties, onNext }: Props) {
-	const [selectedId, setSelectedId] = useState<string | null>(null);
-	const containerRef = useRef<HTMLDivElement>(null);
-	const columns = useBreakpointValue({ base: 1, sm: 2, md: 3 }) ?? 3;
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const selected = properties.find((p) => p.id === selectedId) ?? null;
 
-	const handleCardClick = (id: string) => {
-		setSelectedId((prev) => (prev === id ? null : id));
-	};
+  if (selected) {
+    return (
+      <Box w="100%" h="100%" p={6} overflowY="auto" bg="gray.50">
+        <Button
+          leftIcon={<ArrowBackIcon />}
+          onClick={() => setSelectedId(null)}
+          mb={4}
+          colorScheme="gray"
+          variant="ghost"
+        >
+          物件一覧に戻る
+        </Button>
 
-	const handleClickOutside = (e: React.MouseEvent<HTMLDivElement>) => {
-		if (e.target === containerRef.current) {
-			setSelectedId(null);
-		}
-	};
+        <Heading size="lg" mb={2}>
+          {selected.name}
+        </Heading>
+        <Text color="gray.500" mb={2}>
+          {selected.address}
+        </Text>
+        <Box
+          as="img"
+          src={selected.imageUrl}
+          alt={selected.name}
+          w="100%"
+          maxH="400px"
+          objectFit="cover"
+          mb={4}
+          borderRadius="md"
+        />
+        <Text whiteSpace="pre-wrap" fontSize="md" mb={6}>
+          {selected.description}
+        </Text>
 
-	const rows = [];
-	for (let i = 0; i < properties.length; i += columns) {
-		const rowItems = properties.slice(i, i + columns);
-		const hasSelected = rowItems.some((p) => p.id === selectedId);
+        <Button colorScheme="blue" onClick={onNext}>
+          この物件を選択して次へ進む
+        </Button>
+      </Box>
+    );
+  }
 
-		rows.push(
-			<SimpleGrid key={`row-${i}`} minChildWidth="280px" spacing={4} mb={2}>
-				{rowItems.map((property) => (
-					<PropertyCard
-						key={property.id}
-						property={property}
-						isDimmed={!!selectedId && selectedId !== property.id}
-						onClick={() => handleCardClick(property.id)}
-					/>
-				))}
-			</SimpleGrid>,
-		);
-
-		if (hasSelected) {
-			const selected = rowItems.find((p) => p.id === selectedId);
-			if (selected) {
-				rows.push(
-					<Box
-						key={`details-${selected.id}`}
-						borderWidth="1px"
-						borderRadius="md"
-						p={4}
-						mb={4}
-						bg="gray.50"
-						gridColumn="1 / -1"
-					>
-						<Heading size="md" mb={2}>
-							{selected.name}
-						</Heading>
-						<Text color="gray.500">{selected.address}</Text>
-						<Text mt={2} whiteSpace="pre-wrap">
-							{selected.description}
-						</Text>
-						<Button mt={4} colorScheme="blue" onClick={onNext}>
-							この物件を選択して次へ進む
-						</Button>
-					</Box>,
-				);
-			}
-		}
-	}
-
-	return (
-		<Box
-			ref={containerRef}
-			onClick={handleClickOutside}
-			height="100%"
-			overflowY="auto"
-		>
-			<Container maxW="6xl" py={6}>
-				{rows}
-			</Container>
-		</Box>
-	);
+  return (
+    <Box py={6} px={4} w="100%">
+      <SimpleGrid minChildWidth="320px" spacing={4} mb={4} w="100%">
+        {properties.map((property) => (
+          <PropertyCard
+            key={property.id}
+            property={property}
+            onClick={(id) => setSelectedId(id)}
+          />
+        ))}
+      </SimpleGrid>
+    </Box>
+  );
 }
