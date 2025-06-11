@@ -8,4 +8,6 @@ export type Furniture = {
   imageUrl: string;
   category: string;
   description?: string;
+  selected?: boolean; // ユーザーが選択したかどうか
+  count?: number; // 選択した個数
 };

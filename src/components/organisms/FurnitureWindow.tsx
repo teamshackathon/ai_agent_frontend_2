@@ -1,15 +1,7 @@
 // components/organisms/FurnitureWindow.tsx
 
 import { useState, useRef } from "react";
-import {
-  Box,
-  Button,
-  Container,
-  Heading,
-  SimpleGrid,
-  Text,
-  useBreakpointValue,
-} from "@chakra-ui/react";
+import { Box, SimpleGrid, useBreakpointValue, Button } from "@chakra-ui/react";
 import { FurnitureCard } from "@/components/molecules/furniture/FurnitureCard";
 import type { Furniture } from "@/lib/domain/FurnitureQuery";
 
@@ -19,77 +11,80 @@ type Props = {
 };
 
 export default function FurnitureWindow({ furnitures, onNext }: Props) {
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [items, setItems] = useState<Furniture[]>(
+    furnitures.map((f) => ({ ...f, selected: false, count: 0 }))
+  );
+
   const containerRef = useRef<HTMLDivElement>(null);
   const columns = useBreakpointValue({ base: 1, sm: 2, md: 3 }) ?? 3;
 
-  const handleCardClick = (id: string) => {
-    setSelectedId((prev) => (prev === id ? null : id));
-  };
-
-  const handleClickOutside = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.target === containerRef.current) {
-      setSelectedId(null);
-    }
-  };
-
-  const rows = [];
-  for (let i = 0; i < furnitures.length; i += columns) {
-    const rowItems = furnitures.slice(i, i + columns);
-    const hasSelected = rowItems.some((f) => f.id === selectedId);
-
-    rows.push(
-      <SimpleGrid key={`row-${i}`} minChildWidth="280px" spacing={4} mb={2}>
-        {rowItems.map((furniture) => (
-          <FurnitureCard
-            key={furniture.id}
-            furniture={furniture}
-            isDimmed={!!selectedId && selectedId !== furniture.id}
-            onClick={() => handleCardClick(furniture.id)}
-          />
-        ))}
-      </SimpleGrid>
+  const handleCardClick = (id: string, isSelected: boolean) => {
+    setItems((prev) =>
+      prev.map((item) => {
+        if (item.id !== id) return item;
+        if (isSelected) {
+          // 選択解除
+          return { ...item, selected: false, count: 0 };
+        } else {
+          // 新規選択
+          return { ...item, selected: true, count: 1 };
+        }
+      })
     );
+  };
 
-    if (hasSelected) {
-      const selected = rowItems.find((f) => f.id === selectedId);
-      if (selected) {
-        rows.push(
-          <Box
-            key={`details-${selected.id}`}
-            borderWidth="1px"
-            borderRadius="md"
-            p={4}
-            mb={4}
-            bg="gray.50"
-            gridColumn="1 / -1"
-          >
-            <Heading size="md" mb={2}>
-              {selected.name}
-            </Heading>
-            <Text color="gray.500">{selected.category}</Text>
-            <Text mt={2} whiteSpace="pre-wrap">
-              {selected.description}
-            </Text>
-            <Button mt={4} colorScheme="blue" onClick={onNext}>
-              この家具を選択して次へ進む
-            </Button>
-          </Box>
-        );
-      }
-    }
-  }
+  const increment = (id: string) => {
+    setItems((prev) =>
+      prev.map((item) =>
+        item.id === id ? { ...item, count: (item.count || 0) + 1 } : item
+      )
+    );
+  };
+
+  const decrement = (id: string) => {
+    setItems((prev) =>
+      prev.map((item) => {
+        if (item.id !== id) return item;
+        const newCount = (item.count || 0) - 1;
+        if (newCount <= 0) return { ...item, selected: false, count: 0 };
+        return { ...item, count: newCount };
+      })
+    );
+  };
 
   return (
     <Box
       ref={containerRef}
-      onClick={handleClickOutside}
+      onClick={(e) => {
+        if (e.target === containerRef.current) {
+          setItems((prev) =>
+            prev.map((item) => ({ ...item, selected: false, count: 0 }))
+          );
+        }
+      }}
       height="100%"
       overflowY="auto"
     >
-      <Container maxW="6xl" py={6}>
-        {rows}
-      </Container>
+      <Box w="100%" py={6} px={4} mx="auto">
+        <SimpleGrid minChildWidth="280px" spacing={4} mb={2}>
+          {items.map((furniture) => (
+            <FurnitureCard
+              key={furniture.id}
+              furniture={furniture}
+              onClick={() =>
+                handleCardClick(furniture.id, furniture.selected || false)
+              }
+              isSelected={furniture.selected || false}
+              count={furniture.count || 0}
+              onIncrement={() => increment(furniture.id)}
+              onDecrement={() => decrement(furniture.id)}
+            />
+          ))}
+        </SimpleGrid>
+      </Box>
+      <Button colorScheme="blue" onClick={onNext}>
+        この物件を選択して次へ進む
+      </Button>
     </Box>
   );
 }

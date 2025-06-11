@@ -5,6 +5,7 @@ import FurnitureWindow from "@/components/organisms/FurnitureWindow";
 import Header from "@/components/organisms/Header";
 import MovingWindow from "@/components/organisms/MovingWindow";
 import PropertyWindow from "@/components/organisms/PropertyWindow";
+import VRWindow from "@/components/organisms/VRWindow";
 import { stepAtom } from "@/lib/atom/StepAtom";
 import { Furniture } from "@/lib/domain/FurnitureQuery";
 import type { Property } from "@/lib/domain/PropertyQuery";
@@ -201,7 +202,7 @@ export default function Chat() {
 
   const [step, setStep] = useAtom(stepAtom);
   const handleNext = () => {
-    setStep((prev) => (prev + 1) % 3);
+    setStep((prev) => (prev + 1) % 4);
   };
 
   const renderLeftPanel = () => {
@@ -215,6 +216,8 @@ export default function Chat() {
           <FurnitureWindow furnitures={mockFurnitures} onNext={handleNext} />
         );
       case 2:
+        return <VRWindow onNext={handleNext} />;
+      case 3:
         return <MovingWindow onNext={handleNext} />;
       default:
         return null;
