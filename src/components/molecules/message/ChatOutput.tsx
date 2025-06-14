@@ -31,14 +31,26 @@ export const ChatOutput = ({
 				pt={3}
 				sx={scrollbarStyle}
 			>
-				{messages.slice().map((message) => {
+				{messages.slice().map((message, index) => {
 					switch (message.role) {
 						case ROLES.USER:
-							return <UserMessage key={message.id} message={message} />;
+							return (
+								<UserMessage key={`${message.id}-${index}`} message={message} />
+							);
 						case ROLES.ASSISTANT:
-							return <AssistantMessage key={message.id} message={message} />;
+							return (
+								<AssistantMessage
+									key={`${message.id}-${index}`}
+									message={message}
+								/>
+							);
 						case ROLES.SYSTEM:
-							return <SystemMessage key={message.id} message={message} />;
+							return (
+								<SystemMessage
+									key={`${message.id}-${index}`}
+									message={message}
+								/>
+							);
 						default:
 							return null;
 					}

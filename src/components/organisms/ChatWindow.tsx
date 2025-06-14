@@ -43,7 +43,7 @@ export default function ChatWindow({
 	const handleSend = async () => {
 		if (!input.trim() && !imageFile) return;
 
-		const userMessage = generateMessage(input.trim(), ROLES.USER);
+		const userMessage = generateMessage(null, input.trim(), ROLES.USER);
 
 		// 🔽 画像ファイルがある場合はログ（API拡張ポイント）
 		if (imageFile) {

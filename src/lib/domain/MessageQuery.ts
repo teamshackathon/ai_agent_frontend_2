@@ -36,8 +36,8 @@ export type ToolCall = {
  * Firestoreやログなどの保存対象としても使用可能。
  */
 export type Message = {
-	/** 一意なメッセージID（UUIDなど） */
-	id: string;
+	/** chat-id */
+	id: string | null;
 
 	/** 発言者のロール（ユーザー/アシスタント/システム） */
 	role: Role;
@@ -72,12 +72,13 @@ export type Message = {
  * @returns 生成されたメッセージオブジェクト
  */
 export function generateMessage(
+	id: string | null,
 	text: string,
 	role: Role,
 	options: Partial<Omit<Message, "id" | "text" | "role" | "timeStamp">> = {},
 ): Message {
 	return {
-		id: crypto.randomUUID(),
+		id: id ?? `temp-${Date.now()}`, // ← chat_idがnullのときは仮ID
 		text,
 		role,
 		timeStamp: new Date(),
@@ -95,11 +96,13 @@ type ChatInput = {
 	response: string;
 	history: ChatMessage[];
 	model_name?: string | null;
+	chat_id: string | null;
 };
 
 type ChatOutput = {
 	role: string;
 	response: string;
+	chat_id: string;
 };
 
 export async function postMessage(message: Message): Promise<void> {
@@ -126,9 +129,13 @@ export async function sendMessage(message: Message, history: Message[]) {
 		response: message.text ?? "",
 		history: apiHistory,
 		model_name: "gemini-pro",
+		chat_id: message.id || null, // ← ""ではなくnullを送る
 	};
 
 	const response = await client.post<ChatInput, ChatOutput>("/chat", payload);
+
+	console.log("response:", response);
+	console.log("response.data:", response.data);
 
 	return response.data;
 }
